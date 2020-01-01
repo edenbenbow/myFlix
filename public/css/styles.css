@@ -1,0 +1,46 @@
+/*
+===================================
+General
+===================================
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+
+h1 {
+  position: relative;
+  font-family: 'Trbuchet MS', Arial, Helvetica, sand-serif;
+}
+
+#header {
+  color: #0B6623;
+}
+
+body {
+font-family: 'Roboto', sans-serif;
+line-height: 1.5;
+margin-top: 40px;
+margin-left: 40px;
+margin-right: 40px;
+text-align: left;
+}
+
+table {
+width: 100%;
+border: 2px solid lightgrey;
+border-collapse: collapse;
+margin-bottom: 40px;
+}
+
+th {
+padding: 5px;
+border:  2px solid lightgrey;
+}
+
+td {
+width: 15%;
+padding: 5px;
+border: 1px solid lightgrey;
+}
