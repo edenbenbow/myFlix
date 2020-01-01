@@ -4,12 +4,120 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>Watchr</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
-<h1>Watchr</h1>
+<h1>Watchr documentation</h1>
 <p>This web app is designed to provide users with access to information about different movies, directors, and genres.</p>
 
 <p>Users will be able to sign up, update their personal information, and compile a list of their favorite movies.</p>
+
+<table>
+  <thead>
+    <tr id="header">
+      <th>Request</th>
+      <th>URL</th>
+      <th>HTTP method</th>
+      <th>Query parameters</th>
+      <th>Request body data format</th>
+      <th>Response data format</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Return a list of all movies</td>
+      <td>/movies</td>
+      <td>GET</td>
+      <td>None</td>
+      <td>None</td>
+      <td>JSON object holding data about all movies. Example:<br> {
+        title : "Head of State",
+        director: "Chris Rock",
+        genre: "Comedy",
+        description: 'Chris Rock plays Mays Gilliam, a Washington, D.C. alderman who becomes the Democratic Party\'s longshot presidential candidate.'
+        }</td>
+    </tr>
+    <tr>
+      <td>Return data (description, genre, director, image URL) about a single movie by title</td>
+      <td>/movies/[title]</td>
+      <td>GET</td>
+      <td>None</td>
+      <td>None</td>
+      <td>JSON object showing movie data including genre, name, and description. (See above.)</td>
+    </tr>
+    <tr>
+      <td>Return data about a genre (description) by name/title</td>
+      <td>/genres/[name]</td>
+      <td>GET</td>
+      <td>None</td>
+      <td>None</td>
+      <td>JSON object holding data about the genre, showing name and description. Example:<br>{
+        name: "Mystery",
+        description: "In this genre, detectives or other professionals solve crimes."
+        }</td>
+    </tr>
+    <tr>
+      <td>Return data about a director (bio, birth year) by name</td>
+      <td>/directors/[name]</td>
+      <td>GET</td>
+      <td>None</td>
+      <td>None</td>
+      <td>JSON object holding data about the director</td>
+    </tr>
+    <tr>
+      <td>Allow new users to register</td>
+      <td>/users</td>
+      <td>POST</td>
+      <td>None</td>
+      <td>JSON object that contains new user data.<br>
+       Example:<br>
+        {
+        "username": "janeanderson",
+        "password": "12345",
+        "email": "janeanderson@gmail.com",
+        "dob": "1/1/2001" }
+      </td>
+      <td>JSON object showing new user data, including username, password, email, and date of birth</td>
+    </tr>
+    <tr>
+      <td>Allow users to update their user info</td>
+      <td>/users/[username]</td>
+      <td>PUT</td>
+      <td>None</td>
+      <td>JSON object. Example:<br>
+        {
+        "username": "johnsmith",
+        "password": "12345",
+        "email": "johnsmith@gmail.com",
+        "dob": "1/1/2001" }</td>
+      <td>A text message confirming the user info was updated</td>
+    </tr>
+    <tr>
+      <td>Allow users to add a movie to their list of favorites</td>
+      <td>/users/[username]/favorites/[title]</td>
+      <td>POST</td>
+      <td>None</td>
+      <td>None</td>
+      <td>JSON object showing submitted movie data</td>
+    </tr>
+    <tr>
+      <td>Allow users to remove a movie from their list of favorites</td>
+      <td>/movies/[username]/favorites/[title]</td>
+      <td>DELETE</td>
+      <td>None</td>
+      <td>None</td>
+      <td>A text message confirming the movie was removed</td>
+    </tr>
+    <tr>
+      <td>Allow existing users to deregister</td>
+      <td>/users/[username]</td>
+      <td>DELETE</td>
+      <td>None</td>
+      <td>None</td>
+      <td>A text message confirming the account was deleted</td>
+    </tr>
+  </tbody>
+</table>
 
 </body>
 </html>
