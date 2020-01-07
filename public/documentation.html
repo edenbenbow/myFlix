@@ -39,7 +39,7 @@
     </tr>
     <tr>
       <td>Return data (description, genre, director, image URL) about a single movie by title</td>
-      <td>/movies/[title]</td>
+      <td>/movies/[MovieID]</td>
       <td>GET</td>
       <td>None</td>
       <td>None</td>
@@ -81,7 +81,7 @@
     </tr>
     <tr>
       <td>Allow users to update their user info</td>
-      <td>/users/[username]</td>
+      <td>/users/[UserID]</td>
       <td>PUT</td>
       <td>None</td>
       <td>JSON object. Example:<br>
@@ -94,7 +94,7 @@
     </tr>
     <tr>
       <td>Allow users to add a movie to their list of favorites</td>
-      <td>/users/[username]/favorites/[title]</td>
+      <td>/users/[UserID]/favorites/[MovieID]</td>
       <td>POST</td>
       <td>None</td>
       <td>None</td>
@@ -102,7 +102,7 @@
     </tr>
     <tr>
       <td>Allow users to remove a movie from their list of favorites</td>
-      <td>/movies/[username]/favorites/[title]</td>
+      <td>/movies/[UserID]/favorites/[MovieID]</td>
       <td>DELETE</td>
       <td>None</td>
       <td>None</td>
@@ -110,7 +110,7 @@
     </tr>
     <tr>
       <td>Allow existing users to deregister</td>
-      <td>/users/[username]</td>
+      <td>/users/[UserID]</td>
       <td>DELETE</td>
       <td>None</td>
       <td>None</td>
