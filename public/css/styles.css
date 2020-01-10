@@ -27,6 +27,12 @@ margin-right: 40px;
 text-align: left;
 }
 
+.example {
+  color: blue;
+  size: 12px;
+  margin-top: 10px;
+}
+
 table {
 width: 100%;
 border: 2px solid lightgrey;
