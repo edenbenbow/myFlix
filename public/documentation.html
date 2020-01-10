@@ -10,7 +10,7 @@
 <h1>Watchr documentation</h1>
 <p>This web app is designed to provide users with access to information about different movies, directors, and genres.</p>
 
-<p>Users will be able to sign up, update their personal information, and compile a list of their favorite movies.</p>
+<p>Users will be able to sign up, update their personal information, and compile a list of their favorite movies. Enjoy!</p>
 
 <table>
   <thead>
@@ -30,39 +30,35 @@
       <td>GET</td>
       <td>None</td>
       <td>None</td>
-      <td>JSON object holding data about all movies. Example:<br> {
-        title : "Head of State",
-        director: "Chris Rock",
-        genre: "Comedy",
-        description: 'Chris Rock plays Mays Gilliam, a Washington, D.C. alderman who becomes the Democratic Party\'s longshot presidential candidate.'
-        }</td>
+      <td>JSON object holding data about all movies.</td>
     </tr>
     <tr>
       <td>Return data (description, genre, director, image URL) about a single movie by title</td>
-      <td>/movies/[MovieID]</td>
+      <td>/movies/[name]</td>
       <td>GET</td>
       <td>None</td>
       <td>None</td>
-      <td>JSON object showing movie data including genre, name, and description. (See above.)</td>
+      <td>JSON object showing movie data including genre, name, and description. Example:<br><font class="example">{"Genre":{"Name":"Comedy","Description":"The main purpose of the comedy genre is to amuse the audience."},"Director":{"Name":"Chris Rock","Bio":"Chris Rock is an American comedian, director, producer, and screenwriter.","Birth":"1965-02-07T00:00:00.000Z"},"_id":"5e1110e8c6b8972a9a43264e","Title":"Head of State","Description":"Chris Rock plays Mays Gilliam, a Washington, D.C., alderman who becomes a longshot presidential candidate.","ImagePath":"headofstate.png","Featured":true}</font></td>
     </tr>
     <tr>
       <td>Return data about a genre (description) by name/title</td>
-      <td>/genres/[name]</td>
+      <td>/movies/genres/[name]</td>
       <td>GET</td>
       <td>None</td>
       <td>None</td>
-      <td>JSON object holding data about the genre, showing name and description. Example:<br>{
-        name: "Mystery",
-        description: "In this genre, detectives or other professionals solve crimes."
-        }</td>
+      <td>A text message showing the genre's name and description. Example:<br>
+        <font class="example"><p>Western</p>
+        <p>Westerns tell stories primarily in the second half of the 19th century in the American Old West. The protagonists are often cowboys or gunfighters.</font></p>
+        </td>
     </tr>
     <tr>
       <td>Return data about a director (bio, birth year) by name</td>
-      <td>/directors/[name]</td>
+      <td>/movies/directors/[name]</td>
       <td>GET</td>
       <td>None</td>
       <td>None</td>
-      <td>JSON object holding data about the director</td>
+      <td>JSON object holding data about the director. Example:<br>
+      <font class="example">{"Name":"Mike Newell","Bio":"Mike Newell is a British director and producer.","Birth":"1942-03-28T00:00:00.000Z"}</font></td>
     </tr>
     <tr>
       <td>Allow new users to register</td>
@@ -71,11 +67,11 @@
       <td>None</td>
       <td>JSON object that contains new user data.<br>
        Example:<br>
-        {
-        "username": "janeanderson",
-        "password": "12345",
-        "email": "janeanderson@gmail.com",
-        "dob": "1/1/2001" }
+        <font class="example">{
+        "Username": "janeanderson",
+        "Password": "12345",
+        "Email": "janeanderson@gmail.com",
+        "Birthday": "1/1/2001" }</font>
       </td>
       <td>JSON object showing new user data, including username, password, email, and date of birth</td>
     </tr>
@@ -85,16 +81,16 @@
       <td>PUT</td>
       <td>None</td>
       <td>JSON object. Example:<br>
-        {
-        "username": "johnsmith",
-        "password": "12345",
-        "email": "johnsmith@gmail.com",
-        "dob": "1/1/2001" }</td>
+        <font class="example">{
+        "Username": "johnsmith",
+        "Password": "12345",
+        "Email": "johnsmith@gmail.com",
+        "Birthday": "1/1/2001" }</font></td>
       <td>A text message confirming the user info was updated</td>
     </tr>
     <tr>
       <td>Allow users to add a movie to their list of favorites</td>
-      <td>/users/[UserID]/favorites/[MovieID]</td>
+      <td>/users/[username]/favorites/[MovieID]</td>
       <td>POST</td>
       <td>None</td>
       <td>None</td>
@@ -102,7 +98,7 @@
     </tr>
     <tr>
       <td>Allow users to remove a movie from their list of favorites</td>
-      <td>/movies/[UserID]/favorites/[MovieID]</td>
+      <td>/users/[username]/favorites/[MovieID]</td>
       <td>DELETE</td>
       <td>None</td>
       <td>None</td>
@@ -114,7 +110,8 @@
       <td>DELETE</td>
       <td>None</td>
       <td>None</td>
-      <td>A text message confirming the account was deleted</td>
+      <td>A text message confirming the account was deleted. Example:<br>
+      <font class="example">janie123 was deleted.</font></td>
     </tr>
   </tbody>
 </table>
