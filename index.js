@@ -2,119 +2,15 @@ const express = require('express'),
   morgan = require('morgan'),
   bodyParser = require('body-parser'),
   uuid = require('uuid');
-
 const app = express();
+const mongoose = require('mongoose');
+const Models = require('./models.js');
 
-//Movie data
+const Movies = Models.Movie;
+const Users = Models.User;
 
-let movies = [ {
-    title : 'Head of State',
-    director: 'Chris Rock',
-    genre: 'Comedy',
-    description: 'Chris Rock plays Mays Gilliam, a Washington, D.C. alderman who becomes the Democratic Party\'s longshot presidential candidate.'
-},
-{
-    title : 'The Good, the Bad, and the Ugly',
-    director: 'Sergio Leone',
-    genre: 'Western',
-    description: 'In 1862, during the American Civil War, a trio of bounty hunters race to find a chest of Confederate treasure.'
-},
-{
-    title : 'Annie Hall',
-    director: 'Woody Allen',
-    genre: 'Comedy',
-    description: 'The comedian Alvy Singer is trying to understand why his relationship with Annie Hall ended a year ago.'
-},
-
-{
-    title : 'The Lives of Others',
-    director: 'Florian Henckel von Donnersmarck',
-    genre: 'Thriller',
-    description: 'In 1984 East Germany, Stasi Hauptmann Gerd Wiesler (Ulrich Mühe), code name HGW XX/7, is ordered to spy on the playwright Georg Dreyman (Sebastian Koch), who has escaped state scrutiny due to his pro-Communist views and international recognition.'
-},
-{
-    title : 'About Time',
-    director: 'Richard Curtis',
-    genre: 'Comedy',
-    description: 'A recent university graduate from Cornwall discovers he can time travel.'
-},
-{
-    title : 'Tommy Boy',
-    director: 'Peter Segal',
-    genre: 'Comedy',
-    description: 'Tommy Callahan (Chris Farley) and Richard Hayden (David Spade) embark on a roadtrip to sell brakepads and protect the legacy of Tommy\'s recently departed father.'
-},
-{
-    title : 'Four Weddings and a Funeral',
-    director: 'Mike Newell',
-    genre: 'Comedy',
-    description: 'A group of friends laugh, love, and grieve over the course of a year in London.'
-},
-{
-    title : 'Manhattan Murder Mystery',
-    director: 'Woody Allen',
-    genre: 'Mystery',
-    description: 'A long-married couple gets caught in a madcap adventure when they suspect their neighbor may have murdered his wife.'
-},
-{
-    title : 'Our Little Sister',
-    director: 'Hirokazu Koreeda',
-    genre: 'Drama',
-    description: 'Three sisters who live in Kamakura agree to take care of their young half-sister after their father dies.'
-},
-{
-    title : 'Howards End',
-    director: 'James Ivory',
-    genre: 'Drama',
-    description: 'Howards End revolves around three families in England at the beginning of the 20th century: the Wilcoxes, rich capitalists with a fortune made in the colonies; the half-German Schlegel siblings (Margaret, Helen, and Tibby), whose cultural pursuits have much in common with the Bloomsbury Group; and the Basts, an impoverished young couple from a lower-class background.'
-}
-];
-
-//Genre page data
-let genres = [
-  {name: 'Comedy', description: 'The main purpose of the comedy genre is to amuse the audience.'},
-  {name: 'Western', description: 'Westerns tell stories primarily in the second half of the 19th century in the American Old West. The protagonists are often cowboys or gunfighers.'},
-  {name: 'Thriller', description: 'Thrillers contain heightened feelings of suspense, excitement, surprise, anticipation, and anxiety.'},
-  {name: 'Mystery', description: 'In this genre, detectives or other professionals solve crimes.'},
-  {name: 'Drama', description: 'Films that are more serious than humorous in tone.'}
-];
-
-//Director page data
-let directors = [
-  {name:'Chris Rock', yob:'1965', yod:''},
-  {name:'Sergio Leone', yob:'1929', yod:'1989'},
-  {name:'Woody Allen', yob:'1935', yod:''},
-  {name:'Florian Henckel von Donnersmarck', yob:'1973', yod:''},
-  {name:'Richard Curtis', yob:'1956', yod:''},
-  {name:'Peter Segal', yob:'1962', yod:''},
-  {name:'Mike Newell', yob:'1942', yod:''},
-  {name:'Hirokazu Koreeda', yob:'1962', yod:''},
-  {name:'James Ivory', yob:'1921', yod:''},
-];
-
-//Example favorites
-
-let favorites = [
-  {
-      title : 'The Good, the Bad, and the Ugly',
-      director: 'Sergio Leone',
-      genre: 'Western',
-      description: 'In 1862, during the American Civil War, a trio of bounty hunters race to find a chest of Confederate treasure.'
-  },
-];
-
-//Example users
-
-let users = [
-  {
-  username: 'johnsmith',
-  password: '12345',
-  email: 'johnsmith@gmail.com',
-  dob: '1/1/2001',
-  favorites: ['Tommy Boy']
-}
-];
-
+//mongoose.set('useFindAndModify', false);
+mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
 
 //Middleware functions
 
@@ -127,107 +23,186 @@ app.use(express.static('public'));
 app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500).send('Error message');
+  next()
 });
 
 //Returns a list of all movies
 
-app.get("/movies", (req, res) => {
- res.json(movies);
+app.get("/movies", function(req, res) {
+
+  Movies.find()
+  .then(function(movies){
+    res.status(201).json(movies);
+  })
+  .catch(function(error){
+    console.error(error);
+    res.status(500).send("Error" + err);
+  });
 });
 
 //Returns data about a single movie
 
-app.get("/movies/:title", (req, res) => {
-  res.json(movies.find( (movie) =>
-    {return movie.title.toLowerCase() === req.params.title}));
+app.get("/movies/:Title",function(req, res){
+  Movies.find({Title : req.params.Title})
+  .then(function(movies){
+    res.status(201).json(movies)
+  })
+  .catch(function(error){
+    console.error(error);
+    res.status(500).send("Error" + err);
+  });
 });
 
 //Returns data about a genres
 
-app.get("/genres/:name", (req, res) => {
-  res.json(genres.find( (genre) =>
-    {return genre.name.toLowerCase() === req.params.name}));
+app.get("/movies/genres/:Name",function(req, res){
+  Movies.findOne({'Genre.Name' : req.params.Name})
+    .then(function(movie){
+      res.status(201).send(movie.Genre.Name + '<br>' + movie.Genre.Description)
+    })
+    .catch(function(error){
+      console.error(error);
+      res.status(500).send("Error" + error);
+    });
 });
 
 //Returns data about a director
 
-app.get("/directors/:name", (req, res) => {
-  res.json(directors.find( (director) =>
-    {return director.name.toLowerCase() === req.params.name}));
+app.get("/movies/directors/:Name",function(req, res) {
+  Movies.findOne({"Director.Name" : req.params.Name})
+  .then(function(movies){
+    res.status(201).json(movies.Director)
+  })
+  .catch(function(error){
+    console.error(error);
+    res.status(500).send("Error" + error);
+  });
+});
+
+//Get all users
+
+app.get("/users", function(req, res) {
+
+  Users.find()
+  .then(function(users) {
+    res.status(201).json(users)
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.status(500).send("Error: " + err);
+  });
 });
 
 //Allows new users to register
 
-app.post("/users", (req, res) => {
-  let newUser = req.body;
+app.post('/users', function(req, res) {
+  Users.findOne({ Username : req.body.Username })
+  .then(function(user) {
+    if (user) {
+      return res.status(400).send(req.body.Username + "already exists");
+    } else {
+      Users
+      .create({
+        Username: req.body.Username,
+        Password: req.body.Password,
+        Email: req.body.Email,
+        Birthday: req.body.Birthday
+      })
+      .then(function(user) {res.status(201).json(user) })
+      .catch(function(error) {
+        console.error(error);
+        res.status(500).send("Error: " + error);
+      })
+    }
+  }).catch(function(error) {
+    console.error(error);
+    res.status(500).send("Error: " + error);
+  });
+});
 
-  if (!newUser.username) {
-    const message = 'Missing username in request body';
-    res.status(400).send(message);
-  } else {
-    newUser.id = uuid.v4();
-    users.push(newUser);
-    res.status(201).send(newUser);
-  }
+//Get a user by username
+
+app.get("/users/:Username", function(req, res) {
+  Users.findOne({ Username : req.params.Username })
+  .then(function(user) {
+    res.json(user)
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.status(500).send("Error: " + err);
+  });
 });
 
 //Allows users to update their user info
-app.put("/users/:username", (req, res) => {
-  res.send("User information successfully updated.")
+app.put('/users/:Username', function(req, res) {
+  Users.findOneAndUpdate({ Username : req.params.Username }, //{ $set :
+  {
+    Username : req.params.Username,
+    Password : req.body.Password,
+    Email : req.body.Email,
+    Birthday : req.body.Birthday
+  }/*}*/,
+  { new : true },
+  function(err, updatedUser) {
+    if(err) {
+      console.error(err);
+      res.status(500).send("Error: " +err);
+    } else {
+      res.json(updatedUser)
+    }
+  })
 });
 
 
 //Allows users to add a movie to their list of favorites
 
-app.post("/users/:username/favorites", (req, res) => {
-  let addFavorite = req.body;
-
-  if (!addFavorite.title) {
-    const message = "Missing movie title in request body";
-    res.status(400).send(message);
-  } else {
-    addFavorite.id = uuid.v4();
-    favorites.push(addFavorite);
-    res.status(201).send(addFavorite);
-  }
+app.post('/users/:Username/movies/:MovieId', function(req, res) {
+  Users.findOneAndUpdate({ Username : req.params.Username }, {
+    $push : { FavoriteMovies : req.params.MovieId }
+  },
+  { new : true },
+  function(error, updatedUser) {
+    if (error) {
+      console.error(error);
+      res.status(500).send("Error: " + error);
+    } else {
+      res.json(updatedUser)
+    }
+  })
 });
 
 //Allows users to remove a movie from their list of favorites
 
-app.delete("/users/:username/favorites/:title", (req, res) => {
-    let user = users.find((user) => {
-        return user.username === req.params.username
-    })
-    if (user) {
-        let favorite = user.favorites.find((favorite) => {
-            return favorite.toLowerCase() === req.params.title.toLowerCase()
-        });
-        if (favorite) {
-            user.favorites = user.favorites.filter(function (obj) {
-                return obj.toLowerCase() !== req.params.title.toLowerCase()
-            });
-            res.status(201).send(req.params.title + " was successfully removed from your favorites list.")
-        } else {
-            res.status(404).send("The movie " + req.params.title + " was not found.")
-        }
+app.delete("/users/:username/favorites/:MovieID", function(req, res) {
+  Users.findOneAndUpdate({ Username : req.params.Username}, {
+    $pull : {MovieFavorites : req.params.MovieID}
+  },
+  {new: true},
+  function(error, updatedUser) {
+    if(error) {
+      console.error(error);
+      res.status(500).send("Error: " + error);
     } else {
-        // user not found
-        res.status(404).send("User " + req.params.username + " was not found.")
+      res.status(201).send("Movie ID #"+ req.params.MovieID + " is now removed from favorites.");
     }
+  })
 });
 
-//Allows existing users to deregister
+//Delete a user by username
 
-app.delete("/users/:username", (req, res) => {
-  let user = users.find((user) => {
-    return user.username === req.params.username
+app.delete('/users/:Username', function(req, res) {
+  Users.findOneAndRemove({ Username: req.params.Username })
+  .then(function(user) {
+    if (!user) {
+      res.status(400).send(req.params.Username + " was not found");
+    } else {
+      res.status(200).send(req.params.Username + " was deleted.");
+    }
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.status(500).send("Error: " + err);
   });
-  if (user) {
-    users.filter(function(obj) {
-      return obj.username !== req.params.username
-    });
-    res.status(201).send(req.params.username + " no longer has an account.")
-  }
 });
 
 //Listen for requests
