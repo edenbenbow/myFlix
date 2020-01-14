@@ -7,6 +7,8 @@ const mongoose = require('mongoose');
 const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
+const cors = require('cors');
+const { check, validationResult } = require('express-validator');
 const passport = require('passport');
 require('./passport');
 
@@ -28,6 +30,21 @@ app.use(function (err, req, res, next) {
 });
 
 app.use(bodyParser.json());
+
+app.use(cors());
+
+var allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+
+app.use(cors({
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      var message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
+      return callback(new Error(message ), false);
+    }
+    return callback(null, true);
+  }
+}));
 
 var auth = require('./auth')(app);
 
@@ -100,7 +117,18 @@ app.get("/users", passport.authenticate('jwt', {session: false}), function(req, 
 
 //Allows new users to register
 
-app.post('/users', function(req, res) {
+app.post('/users',
+  [check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail()],(req, res) => {
+
+    var errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+  var hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username : req.body.Username })
   .then(function(user) {
     if (user) {
@@ -109,7 +137,7 @@ app.post('/users', function(req, res) {
       Users
       .create({
         Username: req.body.Username,
-        Password: req.body.Password,
+        Password: hashedPassword,
         Email: req.body.Email,
         Birthday: req.body.Birthday
       })
@@ -117,7 +145,7 @@ app.post('/users', function(req, res) {
       .catch(function(error) {
         console.error(error);
         res.status(500).send("Error: " + error);
-      })
+      });
     }
   }).catch(function(error) {
     console.error(error);
@@ -212,4 +240,7 @@ app.delete('/users/:Username', passport.authenticate('jwt', {session: false}), f
 
 //Listen for requests
 
-app.listen(8080);
+var port = process.env.PORT || 3000;
+app.listen(port, "0.0.0.0", function() {
+console.log("Listening on Port 3000");
+});
