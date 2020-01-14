@@ -45,7 +45,7 @@ app.use(cors({
 
 //GET request
 
-app.get('/', (req, res) {
+app.get('/', function(req, res) {
   var responseText = 'Welcome to Watchr. Enjoy!'
   res.send(responseText);
 });
