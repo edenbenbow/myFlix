@@ -1,16 +1,20 @@
 const express = require('express'),
-  morgan = require('morgan'),
-  bodyParser = require('body-parser'),
-  uuid = require('uuid');
+const morgan = require('morgan'),
+const bodyParser = require('body-parser'),
 const app = express();
 const mongoose = require('mongoose');
+
 const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 const cors = require('cors');
 const { check, validationResult } = require('express-validator');
+
+const auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
+
+//Mongoose database connection
 
 //mongoose.set('useFindAndModify', false);
 //mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
@@ -19,53 +23,48 @@ mongoose.connect('mongodb+srv://edenbenbow:testpw12345@watchr-fg1rx.mongodb.net/
 //Middleware functions
 
 app.use(bodyParser.json());
-
 app.use(morgan('common'));
-
 app.use(express.static('public'));
-
 app.use(function (err, req, res, next) {
   console.error(err.stack);
-  res.status(500).send('Error message');
+  res.status(500).send('Error: Something broke.');
   next()
 });
-
-app.use(bodyParser.json());
-
-app.use(cors());
-
-var allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
 
 app.use(cors({
   origin: function(origin, callback){
     if(!origin) return callback(null, true);
     if(allowedOrigins.indexOf(origin) === -1){
-      var message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
-      return callback(new Error(message ), false);
+      var message = 'The CORS policy for this application does not allow access from origin ' + origin;
+      return callback(new Error(message), false);
     }
     return callback(null, true);
   }
 }));
 
-var auth = require('./auth')(app);
+//GET request
+
+app.get('/', (req, res) {
+  var responseText = 'Welcome to Watchr. Enjoy!'
+  res.send(responseText);
+});
 
 //Returns a list of all movies
 
-app.get("/movies", passport.authenticate('jwt', {session: false}), function(req, res) {
-
+app.get("/movies", function(req, res) {
   Movies.find()
   .then(function(movies){
     res.status(201).json(movies);
-  })
+  });
   .catch(function(error){
     console.error(error);
     res.status(500).send("Error" + err);
   });
 });
 
-//Returns data about a single movie
+//Returns data about a single movie by title
 
-app.get("/movies/:Title", passport.authenticate('jwt', {session: false}), function(req, res){
+app.get("/movies/:Title", function(req, res){
   Movies.find({Title : req.params.Title})
   .then(function(movies){
     res.status(201).json(movies)
@@ -76,9 +75,9 @@ app.get("/movies/:Title", passport.authenticate('jwt', {session: false}), functi
   });
 });
 
-//Returns data about a genres
+//Returns data about a genre by name
 
-app.get("/movies/genres/:Name", passport.authenticate('jwt', {session: false}), function(req, res){
+app.get("/movies/genres/:Name", function(req, res){
   Movies.findOne({'Genre.Name' : req.params.Name})
     .then(function(movie){
       res.status(201).send(movie.Genre.Name + '<br>' + movie.Genre.Description)
@@ -91,7 +90,7 @@ app.get("/movies/genres/:Name", passport.authenticate('jwt', {session: false}), 
 
 //Returns data about a director
 
-app.get("/movies/directors/:Name", passport.authenticate('jwt', {session: false}), function(req, res) {
+app.get("/movies/directors/:Name", function(req, res) {
   Movies.findOne({"Director.Name" : req.params.Name})
   .then(function(movies){
     res.status(201).json(movies.Director)
@@ -172,7 +171,7 @@ app.put('/users/:Username', passport.authenticate('jwt', {session: false}), func
   Users.findOneAndUpdate({ Username : req.params.Username },
   {
     Username : req.body.Username,
-    Password : req.body.Password,
+    Password : hashedPassword,
     Email : req.body.Email,
     Birthday : req.body.Birthday
   },
@@ -228,7 +227,7 @@ app.delete('/users/:Username', passport.authenticate('jwt', {session: false}), f
   Users.findOneAndRemove({ Username: req.params.Username })
   .then(function(user) {
     if (!user) {
-      res.status(400).send(req.params.Username + " was not found");
+      res.status(400).send(req.params.Username + " was not found.");
     } else {
       res.status(200).send(req.params.Username + " was deleted.");
     }
