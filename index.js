@@ -64,7 +64,7 @@ app.get("/movies", function(req, res) {
   })
   .catch(function(error){
     console.error(error);
-    res.status(500).send("Error" + err);
+    res.status(500).send("Error" + error);
   });
 });
 
@@ -77,7 +77,7 @@ app.get("/movies/:Title", function(req, res){
   })
   .catch(function(error){
     console.error(error);
-    res.status(500).send("Error" + err);
+    res.status(500).send("Error" + error);
   });
 });
 
