@@ -20,7 +20,7 @@ require('./passport');
 //mongoose.set('useFindAndModify', false);
 //mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connect(
-    'mongodb+srv://edenbenbow:testpw12345@watchr-fg1rx.mongodb.net/Watchr?retryWrites=true&w=majority',
+    'mongodb+srv://testuser123:test123@watchr-fg1rx.mongodb.net/Watchr?retryWrites=true&w=majority',
     {
       useNewUrlParser: true,
     }
