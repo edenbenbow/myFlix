@@ -23,11 +23,10 @@ mongoose.connect(
     'mongodb+srv://edenbenbow:testpw12345@watchr-fg1rx.mongodb.net/Watchr?retryWrites=true&w=majority',
     {
       useNewUrlParser: true,
-      useFindandModify: false,
       useUnifiedTopology: true
     }
   );
-  
+
 //Middleware functions
 
 app.use(bodyParser.json());
