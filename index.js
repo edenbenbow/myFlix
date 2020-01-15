@@ -28,8 +28,6 @@ mongoose.connect(
     }
   );
   
-  .catch(err => console.log(err.message));
-
 //Middleware functions
 
 app.use(bodyParser.json());
