@@ -1,7 +1,8 @@
 const express = require('express'),
-  morgan = require('morgan'),
-  bodyParser = require('body-parser'),
-  app = express();
+    morgan = require('morgan'),
+    bodyParser = require('body-parser'),
+    uuid = require('uuid');
+const app = express();
 const mongoose = require('mongoose');
 
 const Models = require('./models.js');
@@ -22,9 +23,8 @@ mongoose.connect(
     'mongodb+srv://testuser123:fj2389409uK9P@watchr-fg1rx.mongodb.net/Watchr?retryWrites=true&w=majority',
     {
       useNewUrlParser: true,
-      useUnifiedTopology: true
     }
-  );
+);
 
 //Middleware functions
 
@@ -48,7 +48,7 @@ app.use(cors({
   }
 }));
 
-//GET request - homepage
+//GET request
 
 app.get('/', function(req, res) {
   var responseText = 'Welcome to Watchr. Enjoy!'
@@ -59,52 +59,52 @@ app.get('/', function(req, res) {
 
 app.get("/movies", function(req, res) {
   Movies.find()
-  .then(function(movies){
-    res.status(201).json(movies)
-  })
-  .catch(function(error){
-    console.error(error);
-    res.status(500).send("Error" + error);
-  });
+      .then(function(movies){
+        res.status(201).json(movies)
+      })
+      .catch(function(error){
+        console.error(error);
+        res.status(500).send("Error" + error);
+      });
 });
 
 //Returns data about a single movie by title
 
 app.get("/movies/:Title", function(req, res){
   Movies.findOne({Title : req.params.Title})
-  .then(function(movies){
-    res.status(201).json(movies)
-  })
-  .catch(function(error){
-    console.error(error);
-    res.status(500).send("Error" + error);
-  });
+      .then(function(movies){
+        res.status(201).json(movies)
+      })
+      .catch(function(error){
+        console.error(error);
+        res.status(500).send("Error" + error);
+      });
 });
 
 //Returns data about a genre by name
 
 app.get("/movies/genres/:Name", function(req, res){
   Movies.findOne({'Genre.Name' : req.params.Name})
-    .then(function(movie){
-      res.status(201).send(movie.Genre.Name + '<br>' + movie.Genre.Description)
-    })
-    .catch(function(error){
-      console.error(error);
-      res.status(500).send("Error" + error);
-    });
+      .then(function(movie){
+        res.status(201).send(movie.Genre.Name + '<br>' + movie.Genre.Description)
+      })
+      .catch(function(error){
+        console.error(error);
+        res.status(500).send("Error" + error);
+      });
 });
 
 //Returns data about a director
 
 app.get("/movies/directors/:Name", function(req, res) {
   Movies.findOne({"Director.Name" : req.params.Name})
-  .then(function(movies){
-    res.status(201).json(movies.Director)
-  })
-  .catch(function(error){
-    console.error(error);
-    res.status(500).send("Error" + error);
-  });
+      .then(function(movies){
+        res.status(201).json(movies.Director)
+      })
+      .catch(function(error){
+        console.error(error);
+        res.status(500).send("Error" + error);
+      });
 });
 
 //Get all users
@@ -112,159 +112,141 @@ app.get("/movies/directors/:Name", function(req, res) {
 app.get("/users", passport.authenticate('jwt', {session: false}), function(req, res) {
 
   Users.find()
-  .then(function(users) {
-    res.status(201).json(users)
-  })
-  .catch(function(err) {
-    console.error(err);
-    res.status(500).send("Error: " + err);
-  });
+      .then(function(users) {
+        res.status(201).json(users)
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.status(500).send("Error: " + err);
+      });
 });
 
 //Allows new users to register
 
 app.post('/users',
-  [check('Username', 'Username must be a minimum of 5 characters').isLength({min: 5}),
-    check('Username', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
-    check('Password', 'Password is required').not().isEmpty(),
-    check('Email', 'Please enter a valid email address.').isEmail()],(req, res) => {
+    [check('Username', 'Username is required').isLength({min: 5}),
+      check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+      check('Password', 'Password is required').not().isEmpty(),
+      check('Email', 'Email does not appear to be valid').isEmail()],(req, res) => {
 
-    var errors = validationResult(req);
+      var errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
-    }
-  var hashedPassword = Users.hashPassword(req.body.Password);
-  Users.findOne({ Username : req.body.Username })
-  .then(function(user) {
-    if (user) {
-      return res.status(400).send(req.body.Username + "already exists");
-    } else {
-      Users
-      .create({
-        Username: req.body.Username,
-        Password: hashedPassword,
-        Email: req.body.Email,
-        Birthday: req.body.Birthday
-      })
-      .then(function(user) {res.status(201).json(user) })
-      .catch(function(error) {
+      if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+      }
+      var hashedPassword = Users.hashPassword(req.body.Password);
+      Users.findOne({ Username : req.body.Username })
+          .then(function(user) {
+            if (user) {
+              return res.status(400).send(req.body.Username + "already exists");
+            } else {
+              Users
+                  .create({
+                    Username: req.body.Username,
+                    Password: hashedPassword,
+                    Email: req.body.Email,
+                    Birthday: req.body.Birthday
+                  })
+                  .then(function(user) {res.status(201).json(user) })
+                  .catch(function(error) {
+                    console.error(error);
+                    res.status(500).send("Error: " + error);
+                  });
+            }
+          }).catch(function(error) {
         console.error(error);
         res.status(500).send("Error: " + error);
       });
-
+    });
 
 //Get a user by username
 
 app.get("/users/:Username", passport.authenticate('jwt', {session: false}), function(req, res) {
   Users.findOne({ Username : req.params.Username })
-  .then(function(user) {
-    res.json(user)
-  })
-  .catch(function(err) {
-    console.error(err);
-    res.status(500).send("Error: " + err);
-  });
+      .then(function(user) {
+        res.json(user)
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.status(500).send("Error: " + err);
+      });
 });
 
 //Allows users to update their user info
-app.put('/users/:Username', passport.authenticate('jwt', { session: false }),
-[
-  check('Username', 'Username must be a minimum of 5 characters').isLength({min: 5}),
-  check('Username', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
-  check('Password', 'Password is required').not().isEmpty(),
-  check('Email', 'Email does not appear to be valid.').isEmail()
-],
-    async (req, res) => {
+app.put('/users/:Username', passport.authenticate('jwt', {session: false}), function(req, res) {
+  Users.findOneAndUpdate({ Username : req.params.Username },
+      {
+        Username : req.body.Username,
+        Password : hashedPassword,
+        Email : req.body.Email,
+        Birthday : req.body.Birthday
+      },
+      { new : true },
+      function(err, updatedUser) {
+        if(err) {
+          console.error(err);
+          res.status(500).send("Error: " +err);
+        } else {
+          res.json(updatedUser)
+        }
+      })
+});
 
-  var errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
-  var hashedPassword = Users.hashPassword(req.body.Password);
-
-  Users.findOneAndUpdate({ Username : req.params.Username }), {$set :
-
-    {
-      Username: req.body.Username,
-      Password: hashedPassword,
-      Email: req.body.Email,
-      Birthday: req.body.Birthday
-
-    }},
-    {new: true},
-    function(error, updatedUser) {
-      if(error) {
-        console.error(error);
-        res.status(500).send("Error: " + error);
-      } else {
-        res.json(updatedUser)
-      }
-    }
-
-  });
 
 //Allows users to add a movie to their list of favorites
 
 app.post('/users/:Username/movies/:MovieId', passport.authenticate('jwt', {session: false}), function(req, res) {
   Users.findOneAndUpdate({ Username : req.params.Username }, {
-    $push : { FavoriteMovies : req.params.MovieId }
-  },
-  { new : true },
-  function(error, updatedUser) {
-    if (error) {
-      console.error(error);
-      res.status(500).send("Error: " + error);
-    } else {
-      res.json(updatedUser)
-    }
-  })
-});
-
-.catch(function(error) {
-  console.error(error);
-  res.status(500).send("Error: " + error);
+        $push : { FavoriteMovies : req.params.MovieId }
+      },
+      { new : true },
+      function(error, updatedUser) {
+        if (error) {
+          console.error(error);
+          res.status(500).send("Error: " + error);
+        } else {
+          res.json(updatedUser)
+        }
+      })
 });
 
 //Allows users to remove a movie from their list of favorites
 
 app.delete("/users/:username/favorites/:MovieID", passport.authenticate('jwt', {session: false}), function(req, res) {
   Users.findOneAndUpdate({ Username : req.params.Username}, {
-    $pull : {MovieFavorites : req.params.MovieID}
-  },
-  {new: true},
-  function(error, updatedUser) {
-    if(error) {
-      console.error(error);
-      res.status(500).send("Error: " + error);
-    } else {
-      res.status(201).send("Movie ID #"+ req.params.MovieID + " is now removed from favorites.");
-    }
-  })
+        $pull : {MovieFavorites : req.params.MovieID}
+      },
+      {new: true},
+      function(error, updatedUser) {
+        if(error) {
+          console.error(error);
+          res.status(500).send("Error: " + error);
+        } else {
+          res.status(201).send("Movie ID #"+ req.params.MovieID + " is now removed from favorites.");
+        }
+      })
 });
 
 //Delete a user by username
 
 app.delete('/users/:Username', passport.authenticate('jwt', {session: false}), function(req, res) {
   Users.findOneAndRemove({ Username: req.params.Username })
-  .then(function(user) {
-    if (!user) {
-      res.status(400).send(req.params.Username + " was not found.");
-    } else {
-      res.status(200).send(req.params.Username + " was deleted.");
-    }
-  })
-  .catch(function(err) {
-    console.error(err);
-    res.status(500).send("Error: " + err);
-  });
+      .then(function(user) {
+        if (!user) {
+          res.status(400).send(req.params.Username + " was not found.");
+        } else {
+          res.status(200).send(req.params.Username + " was deleted.");
+        }
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.status(500).send("Error: " + err);
+      });
 });
 
 //Listen for requests
 
 var port = process.env.PORT || 3000;
 app.listen(port, "0.0.0.0", function() {
-console.log("Listening on Port 3000");
+  console.log("Listening on Port 3000");
 });
