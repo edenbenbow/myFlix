@@ -1,8 +1,7 @@
 const express = require('express'),
   morgan = require('morgan'),
   bodyParser = require('body-parser'),
-  uuid = require('uuid');
-const app = express();
+  app = express();
 const mongoose = require('mongoose');
 
 const Models = require('./models.js');
@@ -23,6 +22,7 @@ mongoose.connect(
     'mongodb+srv://testuser123:fj2389409uK9P@watchr-fg1rx.mongodb.net/Watchr?retryWrites=true&w=majority',
     {
       useNewUrlParser: true,
+      useUnifiedTopology: true
     }
   );
 
@@ -48,7 +48,7 @@ app.use(cors({
   }
 }));
 
-//GET request
+//GET request - homepage
 
 app.get('/', function(req, res) {
   var responseText = 'Welcome to Watchr. Enjoy!'
@@ -124,10 +124,10 @@ app.get("/users", passport.authenticate('jwt', {session: false}), function(req, 
 //Allows new users to register
 
 app.post('/users',
-  [check('Username', 'Username is required').isLength({min: 5}),
-    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+  [check('Username', 'Username must be a minimum of 5 characters').isLength({min: 5}),
+    check('Username', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
     check('Password', 'Password is required').not().isEmpty(),
-    check('Email', 'Email does not appear to be valid').isEmail()],(req, res) => {
+    check('Email', 'Please enter a valid email address.').isEmail()],(req, res) => {
 
     var errors = validationResult(req);
 
@@ -152,12 +152,7 @@ app.post('/users',
         console.error(error);
         res.status(500).send("Error: " + error);
       });
-    }
-  }).catch(function(error) {
-    console.error(error);
-    res.status(500).send("Error: " + error);
-  });
-});
+
 
 //Get a user by username
 
@@ -173,25 +168,43 @@ app.get("/users/:Username", passport.authenticate('jwt', {session: false}), func
 });
 
 //Allows users to update their user info
-app.put('/users/:Username', passport.authenticate('jwt', {session: false}), function(req, res) {
-  Users.findOneAndUpdate({ Username : req.params.Username },
-  {
-    Username : req.body.Username,
-    Password : hashedPassword,
-    Email : req.body.Email,
-    Birthday : req.body.Birthday
-  },
-  { new : true },
-  function(err, updatedUser) {
-    if(err) {
-      console.error(err);
-      res.status(500).send("Error: " +err);
-    } else {
-      res.json(updatedUser)
-    }
-  })
-});
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }),
+[
+  check('Username', 'Username must be a minimum of 5 characters').isLength({min: 5}),
+  check('Username', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email does not appear to be valid.').isEmail()
+],
+    async (req, res) => {
 
+  var errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  var hashedPassword = Users.hashPassword(req.body.Password);
+
+  Users.findOneAndUpdate({ Username : req.params.Username }), {$set :
+
+    {
+      Username: req.body.Username,
+      Password: hashedPassword,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
+
+    }},
+    {new: true},
+    function(error, updatedUser) {
+      if(error) {
+        console.error(error);
+        res.status(500).send("Error: " + error);
+      } else {
+        res.json(updatedUser)
+      }
+    }
+
+  });
 
 //Allows users to add a movie to their list of favorites
 
@@ -208,6 +221,11 @@ app.post('/users/:Username/movies/:MovieId', passport.authenticate('jwt', {sessi
       res.json(updatedUser)
     }
   })
+});
+
+.catch(function(error) {
+  console.error(error);
+  res.status(500).send("Error: " + error);
 });
 
 //Allows users to remove a movie from their list of favorites
