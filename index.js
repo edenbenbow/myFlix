@@ -138,7 +138,7 @@ app.post('/users',
       Users.findOne({ Username : req.body.Username })
           .then(function(user) {
             if (user) {
-              return res.status(400).send(req.body.Username + "already exists");
+              return res.status(400).send(req.body.Username + " already exists");
             } else {
               Users
                   .create({
@@ -173,31 +173,49 @@ app.get("/users/:Username", passport.authenticate('jwt', {session: false}), func
 });
 
 //Allows users to update their user info
-app.put('/users/:Username', passport.authenticate('jwt', {session: false}), function(req, res) {
-  Users.findOneAndUpdate({ Username : req.params.Username },
-      {
-        Username : req.body.Username,
-        Password : hashedPassword,
-        Email : req.body.Email,
-        Birthday : req.body.Birthday
-      },
-      { new : true },
-      function(err, updatedUser) {
-        if(err) {
-          console.error(err);
-          res.status(500).send("Error: " +err);
-        } else {
-          res.json(updatedUser)
-        }
-      })
-});
+
+app.put("/users/:Username", passport.authenticate("jwt", { session: false }), [check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email','Email does not appear to be valid').isEmail()],(req, res) => {
+
+    var errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+
+    var hashedPassword = Users.hashPassword(req.body.Password);
+
+    Users.findOneAndUpdate({
+      Username: req.params.Username
+    },
+    {
+      $set: {
+      Username: req.body.Username,
+      Password: hashedPassword,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
+    }
+  },
+  { new: true },
+  function(error, updatedUser) {
+      if (error) {
+        console.error(error);
+        res.status(500).send("Error " + error);
+      } else {
+        res.json(updatedUser);
+      }
+    })
+}});
 
 
 //Allows users to add a movie to their list of favorites
 
 app.post('/users/:Username/movies/:MovieId', passport.authenticate('jwt', {session: false}), function(req, res) {
-  Users.findOneAndUpdate({ Username : req.params.Username }, {
-        $push : { FavoriteMovies : req.params.MovieId }
+  Users.findOneAndUpdate({
+          Username: req.params.Username
+      }, {
+        $push: {FavoriteMovies : req.params.MovieId}
       },
       { new : true },
       function(error, updatedUser) {
@@ -205,9 +223,9 @@ app.post('/users/:Username/movies/:MovieId', passport.authenticate('jwt', {sessi
           console.error(error);
           res.status(500).send("Error: " + error);
         } else {
-          res.json(updatedUser)
+          res.json(updatedUser);
         }
-      })
+      });
 });
 
 //Allows users to remove a movie from their list of favorites
