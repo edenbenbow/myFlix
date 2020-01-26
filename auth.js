@@ -5,15 +5,17 @@ require('./passport');
 
 function generateJWTToken(user) {
   return jwt.sign(user, jwtSecret, {
-    subject: user.Username,
+    subject: user.username,
     expiresIn: '7d',
     algorithm: 'HS256'
   });
-}
+};
+
+/* Post login */
 
 module.exports = (router) => {
   router.post('/login', (req, res) => {
-    passport.authenticate('local', {session : false}, (error, user, info) => {
+    passport.authenticate('local', {session: false}, (error, user, info) => {
       if (error || !user) {
         return res.status(400).json({
           message: 'Something is not right',
@@ -29,4 +31,4 @@ module.exports = (router) => {
       });
     })(req, res);
   });
-}
+};

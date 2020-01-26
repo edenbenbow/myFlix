@@ -8,8 +8,8 @@ var JWTStrategy = passportJWT.Strategy;
 var ExtractJWT = passportJWT.ExtractJwt;
 
 passport.use(new LocalStrategy({
-  usernameField: 'Username',
-  passwordField: 'Password'
+  usernameField: 'username',
+  passwordField: 'password'
 }, (username, password, callback) => {
   console.log(username + ' ' + password);
   Users.findOne({ Username: username }, (error, user) => {
@@ -17,9 +17,9 @@ passport.use(new LocalStrategy({
       console.log(error);
       return callback(error);
     }
-    if (!user || !user.validatePassword(password)) {
+    if (!user) {
       console.log('incorrect username');
-      return callback(null, false, {message: 'Incorrect username or password.'});
+      return callback(null, false, {message: 'Incorrect username.'});
     }
     if (!user.validatePassword(password)) {
       console.log('incorrect password');
