@@ -1,22 +1,55 @@
 import React from 'react';
 import './navbar.scss';
-import {Nav, NavItem, Navbar} from 'react-bootstrap';
+import {Nav, NavItem, Navbar, NavDropdown, Button} from 'react-bootstrap';
 
+import { Link } from 'react-router-dom';
 
 export class Navigation extends React.Component{
+    onLogout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        //localStorage.removeItem('movies');
+        this.setState({
+            user: null
+        });
+        window.open('/', '_self');
+    }
+
     render() {
+      const { user } = this.props;
+      //if (!user) return null;
+      //console.log("this.props: " + JSON.stringify(this.props));
+
+      let userMenu, logoutButton, navLinks;
+
+      if (user) {
+        userMenu =
+            <Nav>
+                <NavDropdown title={user} id="account-dropdown">
+                    <NavDropdown.Item href={`/users/${user}`}>Account</NavDropdown.Item>
+                    <NavDropdown.Divider/>
+                </NavDropdown>
+            </Nav>
+        logoutButton =
+            <Nav>
+                <Button className="logout" onClick={() => this.onLogout()}>Logout</Button>
+            </Nav>
+        navLinks =
+            <Nav className="mr-auto">
+              <Nav.Link href="/">Movies</Nav.Link>
+            </Nav>
+      }
+
         return (
             <Navbar bg="light" variant="light">
-                <Navbar.Brand href="movies"><h1>Watchr</h1></Navbar.Brand>
-                <Nav className="mr-auto">
-                    <Nav.Link href="movies">Movies</Nav.Link>
-                    <Nav.Link href="#">Genres</Nav.Link>
-                    <Nav.Link href="#">Directors</Nav.Link>
-                    <Nav.Link href="#">Favorites</Nav.Link>
-                </Nav>
+                <Navbar.Brand href="/"><h1>Watchr</h1></Navbar.Brand>
+                {navLinks}
+                {userMenu}
+                {logoutButton}
             </Navbar>
         );
     }
 };
 
 export default Navigation;
+
