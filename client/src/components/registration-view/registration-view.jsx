@@ -4,7 +4,7 @@ import './registration-view.scss';
 import axios from 'axios';
 import { Navigation } from '../navbar/navbar';
 
-
+import { Link } from "react-router-dom";
 
 export function RegistrationView(props) {
     const [username, setUsername] = useState('');
@@ -23,20 +23,18 @@ export function RegistrationView(props) {
             birthday: birthday,
             email: email,
         })
-        .then(res => {
-            const data = res.data;
+        .then(response => {
+            const data = response.data;
             console.log(data);
-            alert('registration successful, please log in.');
-            window.open('/');
+            window.open('/', '_self');
         })
         .catch(e => {
-            console.log('error registering user');
+            console.log('Error registering user.');
         });
     };
 
     return (
         <Container>
-            <Navigation/>
             <Form className="registration-form">
                 {/*<img src={logo} alt="logo" style={{ width: "300px" }} />*/}
                 <h2>Create an account</h2>
@@ -75,6 +73,10 @@ export function RegistrationView(props) {
                 <Button variant="primary" type="submit" onClick={handleSubmit}>
                     Sign up
                 </Button>
+                <Link to={`/`}><Button variant="outline-secondary">
+                    Sign in
+                </Button>
+                </Link>
             </Form>
         </Container>
     );
