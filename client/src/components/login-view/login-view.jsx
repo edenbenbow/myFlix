@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Button, Form, Container } from 'react-bootstrap';
 import './login-view.scss';
 import { Navigation } from '../navbar/navbar';
+import axios from 'axios';
+
+import { Link } from "react-router-dom";
 
 
 export function LoginView(props) {
@@ -11,18 +14,25 @@ export function LoginView(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(username, password);
         /* Send a request to the server for authentication */
-        /* then call props.onLoggedIn(username) */
-        props.onLoggedIn(username)
+        axios.post('https://watchrdb.herokuapp.com/login', {
+            username: username,
+            password: password
+        })
+            .then(response => {
+                const data = response.data;
+                props.onLoggedIn(data);
+            })
+            .catch(e => {
+                console.log('no such user')
+                console.log('err: ' + JSON.stringify(e));
+            });
     };
 
 
   return (
       <Container>
-          <Navigation/>
           <Form className="login-form">
-              {/* <img src={logo} alt="logo" style={{ width: "300px" }} />*/}
               <h2>Sign into your account</h2>
           <Form.Group controlId="formBasicUsername">
               <Form.Control
@@ -44,7 +54,13 @@ export function LoginView(props) {
           <Button variant="primary" type="submit" onClick={handleSubmit}>
               Sign in
           </Button>
-      </Form>
+
+              <Link to={`/register`}><Button variant="outline-secondary" className="login">
+              Create account
+          </Button>
+              </Link>
+
+          </Form>
       </Container>
   );
 }
