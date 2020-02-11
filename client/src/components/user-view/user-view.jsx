@@ -6,6 +6,11 @@ import {MovieCard} from '../movie-card/movie-card';
 import {ProfileMovieCard} from '../user-view/profile-movie-card';
 import axios from "axios";
 
+import { connect } from 'react-redux';
+import { setMovies } from '../../actions/actions';
+import { setUser } from '../../actions/actions';
+import {MainView} from "../main-view/main-view";
+
 export class UserView extends React.Component {
 
   constructor(props) {
@@ -332,3 +337,14 @@ export class UserView extends React.Component {
       );
   }
 }
+
+let mapStateToProps = state => {
+  return { movies: state.movies }
+};
+
+const mapDispatchToProps = {
+  setMovies,
+  setUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserView);
