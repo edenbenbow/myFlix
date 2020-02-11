@@ -2,8 +2,16 @@ import React from 'react';
 import axios from 'axios';
 import { Container, CardDeck, Navbar} from 'react-bootstrap';
 
+import { connect } from 'react-redux';
+
 import { BrowserRouter as Router, Route} from "react-router-dom";
 
+// #0
+
+import { setMovies, setSort, setUser, setFilter } from '../../actions/actions';
+
+import MoviesList from '../movies-list/movies-list';
+//import VisibilityFilterInput from '../visibility-filter-input/visibility-filter-input'
 import { RegistrationView } from '../registration-view/registration-view';
 import { LoginView } from '../login-view/login-view';
 import { MovieCard } from '../movie-card/movie-card';
@@ -32,9 +40,7 @@ export class MainView extends React.Component {
         })
             .then(response => {
                 // Assign the result to the state
-                this.setState({
-                    movies: response.data
-                });
+                this.props.setMovies(response.data);
             })
             .catch(function (error) {
                 console.log(error);
@@ -46,27 +52,28 @@ export class MainView extends React.Component {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(response => {
-                this.props.setLoggedUser(response.data);
+                //this.props.setLoggedUser(response.data);
+                this.props.setUser(response.data);
             })
             .catch(function (error) {
                 console.log(error);
             })
     }
 
-    getUsers(token) {
-        axios.get('https://watchrdb.herokuapp.com/users', {
-            headers: { Authorization: `Bearer ${token}`}
-        })
-            .then(response => {
+    //getUsers(token) {
+        //axios.get('https://watchrdb.herokuapp.com/users', {
+            //headers: { Authorization: `Bearer ${token}`}
+        //})
+            //.then(response => {
                 // Assign the result to the state
-                this.setState({
-                    users: response.data
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
+                //this.setState({
+                    //users: response.data
+                //});
+            //})
+            //.catch(function (error) {
+                //console.log(error);
+            //});
+    //}
 
 
     componentDidMount() {
@@ -76,16 +83,14 @@ export class MainView extends React.Component {
                 user: localStorage.getItem('user')
             });
             this.getMovies(accessToken);
-            this.getUsers(accessToken);
         }
     }
 
     onLoggedIn(authData) {
-        console.log(authData);
         this.setState({
             user: authData.user.Username
         });
-
+        this.props.setUser(authData.user);
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.Username);
         this.getMovies(authData.token);
@@ -94,10 +99,12 @@ export class MainView extends React.Component {
 
 
     render() {
-        const { movies, user, users, userInfo, token } = this.state;
+        //const { movies, user, users, userInfo, token } = this.state;
+        let { movies} = this.props;
+        let { user } = this.state;
 
 
-        if (!movies) return <div className="main-view"/>;
+        //if (!movies) return <div className="main-view"/>;
 
         return (
           <Container className="main-view">
@@ -108,17 +115,7 @@ export class MainView extends React.Component {
                     if (!user) {
                       return <LoginView onLoggedIn={user => this.onLoggedIn(user)}/>
                     }
-                      return (
-                        <Container>
-                          <CardDeck>
-                            {
-                              movies.map(m => (
-                                <MovieCard key={m._id} movie={m} />
-                              ))
-                            }
-                          </CardDeck>
-                        </Container>
-                            )
+                      return (<MoviesList movies={movies}/>)
                         }}/>
                         <Route path="/register" render={() => <RegistrationView />} />
                         <Route path="/movies/:movieId" render={({match}) =>
@@ -152,3 +149,14 @@ export class MainView extends React.Component {
         );
     }
 }
+
+let mapStateToProps = state => {
+    return { movies: state.movies }
+};
+
+const mapDispatchToProps = {
+    setMovies,
+    setUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainView);
