@@ -3,22 +3,16 @@ import {Card, Button, CardDeck, ListGroup} from 'react-bootstrap';
 
 import './director-view.scss';
 
-import { Link } from "react-router-dom";
-import {MovieCard} from "../movie-card/movie-card";
+import { connect } from 'react-redux';
+import MoviesList from '../movies-list/movies-list';
 
 
-export class DirectorView extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
+function DirectorView(props) {
+    const {movies, directorName} = props;
 
-  render() {
-    console.log("this.props: " + JSON.stringify(this.props));
-    const { director, movies } = this.props;
+    if (!movies || !movies.length) return null;
 
-    if (!director) return null;
-    //console.log("director: " + JSON.stringify(director));
+    const director = movies.find(movie => movie.Director.Name === directorName).Director;
 
     return (
       <Card style={{ width: '10 rem'}}>
@@ -45,11 +39,7 @@ export class DirectorView extends React.Component {
                             <div className="movies-list">
                                 <span className="label">Movies: </span>
                                 <span className="value">
-                                    <CardDeck>
-                                      {movies.map(m => (
-                                          <MovieCard key={m._id} movie={m} />
-                                      ))}
-                                    </CardDeck>
+                                  return (<MoviesList movies={movies}/>)
                                 </span>
                             </div>
                         </ListGroup.Item>
@@ -60,4 +50,9 @@ export class DirectorView extends React.Component {
 
         );
     }
-}
+
+let mapStateToProps = state => {
+    return { movies: state.movies }
+};
+
+export default connect(({ movies }) => ({ movies }))(DirectorView);
