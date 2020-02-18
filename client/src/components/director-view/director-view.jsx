@@ -8,11 +8,9 @@ import MoviesList from '../movies-list/movies-list';
 
 
 function DirectorView(props) {
-    const {movies, directorName} = props;
+    const {movies, director} = props;
 
     if (!movies || !movies.length) return null;
-
-    const director = movies.find(movie => movie.Director.Name === directorName).Director;
 
     return (
       <Card style={{ width: '10 rem'}}>
@@ -39,7 +37,7 @@ function DirectorView(props) {
                             <div className="movies-list">
                                 <span className="label">Movies: </span>
                                 <span className="value">
-                                  return (<MoviesList movies={movies}/>)
+                                  <MoviesList movies={movies}/>
                                 </span>
                             </div>
                         </ListGroup.Item>
