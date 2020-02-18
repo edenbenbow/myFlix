@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Container, CardDeck, Navbar} from 'react-bootstrap';
+import { Container, Navbar} from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 
@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Route} from "react-router-dom";
 
 // #0
 
-import { setMovies, setSort, setUser, setFilter } from '../../actions/actions';
+import { setMovies, setSort, setUser, setFilter, setUsers } from '../../actions/actions';
 
 import MoviesList from '../movies-list/movies-list';
 //import VisibilityFilterInput from '../visibility-filter-input/visibility-filter-input'
@@ -17,10 +17,9 @@ import { LoginView } from '../login-view/login-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 import { Navigation } from '../navbar/navbar';
-import { DirectorView } from '../director-view/director-view';
-import { GenreView } from '../genre-view/genre-view';
+import DirectorView from '../director-view/director-view';
+import GenreView  from '../genre-view/genre-view';
 import { UserView } from '../user-view/user-view';
-import { ProfileMovieCard } from '../user-view/profile-movie-card';
 
 export class MainView extends React.Component {
 
@@ -29,8 +28,8 @@ export class MainView extends React.Component {
 
         this.state = {
             movies: [],
-            user: null,
-            users: []
+            users: [],
+            user: null
         };
     }
 
@@ -41,6 +40,20 @@ export class MainView extends React.Component {
             .then(response => {
                 // Assign the result to the state
                 this.props.setMovies(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+
+    getUsers(token) {
+        axios.get('https://watchrdb.herokuapp.com/users', {
+            headers: { Authorization: `Bearer ${token}`}
+        })
+            .then(response => {
+                // Assign the result to the state
+                this.props.setUsers(response.data);
             })
             .catch(function (error) {
                 console.log(error);
@@ -59,21 +72,6 @@ export class MainView extends React.Component {
                 console.log(error);
             })
     }
-
-    //getUsers(token) {
-        //axios.get('https://watchrdb.herokuapp.com/users', {
-            //headers: { Authorization: `Bearer ${token}`}
-        //})
-            //.then(response => {
-                // Assign the result to the state
-                //this.setState({
-                    //users: response.data
-                //});
-            //})
-            //.catch(function (error) {
-                //console.log(error);
-            //});
-    //}
 
 
     componentDidMount() {
@@ -94,13 +92,14 @@ export class MainView extends React.Component {
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.Username);
         this.getMovies(authData.token);
+        //this.getUsers(authData.token);
     }
 
 
 
     render() {
         //const { movies, user, users, userInfo, token } = this.state;
-        let { movies} = this.props;
+        let { movies, users } = this.props;
         let { user } = this.state;
 
 
@@ -151,12 +150,17 @@ export class MainView extends React.Component {
 }
 
 let mapStateToProps = state => {
-    return { movies: state.movies }
+    return {
+        movies: state.movies,
+        users: state.users,
+    }
+
 };
 
 const mapDispatchToProps = {
     setMovies,
-    setUser
+    setUser,
+    setUsers
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainView);
