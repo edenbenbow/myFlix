@@ -4,17 +4,13 @@ import {Card, ListGroup, Button, CardDeck} from 'react-bootstrap';
 import './genre-view.scss';
 
 import { Link } from "react-router-dom";
-import {MovieCard} from "../movie-card/movie-card";
+import { connect } from 'react-redux';
+import MoviesList from '../movies-list/movies-list';
 
 
-export class GenreView extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
 
-  render() {
-    const { genreMovie, movies } = this.props;
+function GenreView(props) {
+    const { genreMovie, movies } = props;
     //console.log("this.props: " + JSON.stringify(this.props));
 
     if (!genreMovie) return null;
@@ -39,10 +35,7 @@ export class GenreView extends React.Component {
                 <span className="label">Movies: </span>
                 <span className="value">
                   <CardDeck>
-                    {movies.map(m => (
-                      <MovieCard key={m._id} movie={m} />
-                    ))
-                    }
+                    return (<MoviesList movies={movies}/>)
                   </CardDeck>
                 </span>
               </div>
@@ -52,5 +45,6 @@ export class GenreView extends React.Component {
       </Card>
 
     );
-  }
 }
+
+export default connect(({movies}) => ({movies}))(GenreView);
