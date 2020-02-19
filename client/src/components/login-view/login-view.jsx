@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Form, Container } from 'react-bootstrap';
 import './login-view.scss';
-import { Navigation } from '../navbar/navbar';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
+import { setUser } from '../../actions/actions';
 import { Link } from "react-router-dom";
 
 
@@ -21,11 +23,12 @@ export function LoginView(props) {
         })
             .then(response => {
                 const data = response.data;
+                props.setUser(localStorage.getItem('user'));
                 props.onLoggedIn(data);
             })
             .catch(e => {
                 console.log('no such user')
-                console.log('err: ' + JSON.stringify(e));
+                console.log('err: ' + e);
             });
     };
 
@@ -64,3 +67,9 @@ export function LoginView(props) {
       </Container>
   );
 }
+
+export default connect(({ user }) => ({ user }), {setUser})(LoginView);
+
+LoginView.propTypes = {
+  onLoggedIn: PropTypes.func.isRequired
+};
