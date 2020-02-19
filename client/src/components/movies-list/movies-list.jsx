@@ -1,8 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Card, Button, CardDeck, Container } from 'react-bootstrap';
+import { CardDeck, Container } from 'react-bootstrap';
+import './movies-list.scss';
 
 import { MovieCard } from '../movie-card/movie-card';
+import VisibilityFilterInput from '../visibility-filter-input/visibility-filter-input';
 
 const mapStateToProps = state => {
   const { visibilityFilter } = state;
@@ -21,6 +24,7 @@ function MoviesList(props) {
 
   return (
       <Container>
+        <VisibilityFilterInput id="filterField"/>
         <CardDeck>
       {filteredMovies.map(m => <MovieCard key={m._id} movie={m}/>)}
         </CardDeck>
@@ -28,3 +32,9 @@ function MoviesList(props) {
 }
 
 export default connect(mapStateToProps)(MoviesList);
+
+MoviesList.propTypes = {
+    Movie: PropTypes.shape({
+        Title: PropTypes.string
+    })
+};
