@@ -1,25 +1,20 @@
 import React from 'react';
 import axios from 'axios';
-import { Container, Navbar} from 'react-bootstrap';
-
+import { Container } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
 import { BrowserRouter as Router, Route} from "react-router-dom";
 
-// #0
-
-import { setMovies, setSort, setUser, setFilter, setUsers } from '../../actions/actions';
+import { setMovies, setUser, setUsers } from '../../actions/actions';
 
 import MoviesList from '../movies-list/movies-list';
-//import VisibilityFilterInput from '../visibility-filter-input/visibility-filter-input'
-import { RegistrationView } from '../registration-view/registration-view';
-import { LoginView } from '../login-view/login-view';
-import { MovieCard } from '../movie-card/movie-card';
-import { MovieView } from '../movie-view/movie-view';
-import { Navigation } from '../navbar/navbar';
+import LoginView from '../login-view/login-view';
+import MovieView from '../movie-view/movie-view';
 import DirectorView from '../director-view/director-view';
 import GenreView  from '../genre-view/genre-view';
-import { UserView } from '../user-view/user-view';
+import UserView from '../user-view/user-view';
+import { RegistrationView } from '../registration-view/registration-view';
+import { Navigation } from '../navbar/navbar';
 
 export class MainView extends React.Component {
 
@@ -52,7 +47,6 @@ export class MainView extends React.Component {
             headers: { Authorization: `Bearer ${token}`}
         })
             .then(response => {
-                // Assign the result to the state
                 this.props.setUsers(response.data);
             })
             .catch(function (error) {
@@ -65,7 +59,6 @@ export class MainView extends React.Component {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(response => {
-                //this.props.setLoggedUser(response.data);
                 this.props.setUser(response.data);
             })
             .catch(function (error) {
@@ -81,6 +74,7 @@ export class MainView extends React.Component {
                 user: localStorage.getItem('user')
             });
             this.getMovies(accessToken);
+            this.getUsers(accessToken);
         }
     }
 
@@ -92,18 +86,15 @@ export class MainView extends React.Component {
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.Username);
         this.getMovies(authData.token);
-        //this.getUsers(authData.token);
+        this.getUsers(authData.token);
     }
 
 
 
     render() {
-        //const { movies, user, users, userInfo, token } = this.state;
         let { movies, users } = this.props;
         let { user } = this.state;
 
-
-        //if (!movies) return <div className="main-view"/>;
 
         return (
           <Container className="main-view">
@@ -125,22 +116,16 @@ export class MainView extends React.Component {
                         }/>
                         <Route path="/genres/:name" render={({match}) => {
                             if (!movies) return <div className="main-view"/>;
-                            return <GenreView
-                                genreMovie={movies.find(m => m.Genre.Name === match.params.name)}
-                                movies={movies.filter(m => m.Genre.Name === match.params.name)}
-                            />}
+                            return <GenreView genreName={match.params.name} />}
                         } />
                         <Route path="/directors/:name" render={({ match }) => {
                           if (!movies) return <div className="main-view"/>;
                           return <DirectorView
-                              director={movies.length ? movies.find(m => m.Director.Name === match.params.name).Director : undefined}
-                              movies={movies.filter(m => m.Director.Name === match.params.name)}
+                              directorName={match.params.name}
                           />}
                         } />
                         <Route path="/users/:username" render={({match}) => <
-                            UserView movies={movies}
-                            userProfile={users.find(u => u.Username === match.params.username)}
-                            user={user}
+                            UserView username={match.params.username}
                         />} />
                  </div>
                 </Router>
@@ -161,6 +146,21 @@ const mapDispatchToProps = {
     setMovies,
     setUser,
     setUsers
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainView);
+
+MainView.propTypes = {
+    movie: PropTypes.shape({
+            _id: PropTypes.object
+        }),
+    directorName: PropTypes.shape({
+        name: PropTypes.string
+    }),
+    genreName: PropTypes.shape( {
+        name: PropTypes.string
+    }),
+    user: PropTypes.shape({
+        username: PropTypes.string
+    })
+};
