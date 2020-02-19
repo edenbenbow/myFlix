@@ -1,8 +1,8 @@
 import React from 'react';
 import './navbar.scss';
-import {Nav, NavItem, Navbar, NavDropdown, Button} from 'react-bootstrap';
+import {Nav, Navbar, NavDropdown, Button} from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
-import { Link } from 'react-router-dom';
 
 export class Navigation extends React.Component{
     onLogout() {
@@ -27,7 +27,6 @@ export class Navigation extends React.Component{
             <Nav>
                 <NavDropdown title={user} id="account-dropdown">
                     <NavDropdown.Item href={`/users/${user}`}>Account</NavDropdown.Item>
-                    <NavDropdown.Divider/>
                 </NavDropdown>
             </Nav>
         logoutButton =
@@ -53,3 +52,6 @@ export class Navigation extends React.Component{
 
 export default Navigation;
 
+Navigation.propTypes = {
+  user: PropTypes.string
+}
