@@ -6,14 +6,17 @@ import './genre-view.scss';
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import MoviesList from '../movies-list/movies-list';
+import PropTypes from "prop-types";
 
 
 
 function GenreView(props) {
-    const { genreMovie, movies } = props;
+    const { movies, genreName } = props;
     //console.log("this.props: " + JSON.stringify(this.props));
 
-    if (!genreMovie) return null;
+    if (!movies || !movies.length || !genreName) return null;
+
+    let filteredMovies = movies.filter((m) => m.Genre.Name === genreName);
 
     return (
       <Card style={{ width: '20 rem'}}>
@@ -21,13 +24,13 @@ function GenreView(props) {
           <ListGroup varient="flush">
             <ListGroup.Item>
               <div className="genre-name">
-                <h2 className="value">{genreMovie.Genre.Name}</h2>
+                <h2 className="value">{filteredMovies[0].Genre.Name}</h2>
               </div>
             </ListGroup.Item>
             <ListGroup.Item>
               <div className="genre-description">
                 <span className="label">Description: </span>
-                <span className="value">{genreMovie.Genre.Description}</span>
+                <span className="value">{filteredMovies[0].Genre.Description}</span>
               </div>
             </ListGroup.Item>
             <ListGroup.Item>
@@ -35,7 +38,7 @@ function GenreView(props) {
                 <span className="label">Movies: </span>
                 <span className="value">
                   <CardDeck>
-                    return (<MoviesList movies={movies}/>)
+                    <MoviesList movies={filteredMovies}/>
                   </CardDeck>
                 </span>
               </div>
@@ -48,3 +51,10 @@ function GenreView(props) {
 }
 
 export default connect(({movies}) => ({movies}))(GenreView);
+
+GenreView.propTypes = {
+    Genre: PropTypes.shape({
+        Name: PropTypes.string,
+        Description: PropTypes.string,
+    }).isRequired
+};
