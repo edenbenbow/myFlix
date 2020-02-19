@@ -5,38 +5,36 @@ import './movie-view.scss';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 
-export class MovieView extends React.Component {
+import { connect } from 'react-redux';
+import {setMovies, setUser, setUsers} from "../../actions/actions";
+import {MainView} from "../main-view/main-view";
 
-  constructor() {
-    super();
-    this.state = {};
 
-    this.state = {
-      isFavoriteSelected: false,
-    };
-  }
+function MovieView(props) {
+  const {user, movie, movies} = props;
 
-  addFavorite(event) {
-    const { user, movie } = this.props;
+  if (!user || !movies || !movies.length) return null;
+
+  function addFavorite(event) {
     event.preventDefault();
     axios.post(`https://watchrdb.herokuapp.com/users/${user.Username}/movies/${movie._id}`,
         {Username: localStorage.getItem('user')},
-        {headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
+        {headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}}
     )
-    .then(response => {
+        .then(response => {
           alert(`${movie.Title} has been successfully added!`);
           document.location.reload(true);
-    })
-    .catch(error => {
+        })
+        .catch(error => {
           alert(`We were unable to add ${movie.Title} to your favorites: ` + error);
-    });
-  };
+        })
 
-  removeFavorite(event) {
-    const { user, movie } = this.props;
+  }
+
+  function removeFavorite(event) {
     event.preventDefault();
     axios.delete(`https://watchrdb.herokuapp.com/users/${user.Username}/movies/${movie._id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
     })
         .then(response => {
           alert(`${movie.Title} has been removed from favorites`);
@@ -48,38 +46,28 @@ export class MovieView extends React.Component {
         });
   }
 
-  goBack() {
+  function goBack() {
+    console.log("Test4");
+
     window.location = '/';
   }
 
-  render() {
-    //console.log("this.props: " + JSON.stringify(this.props));
-    const { movie, user } = this.props;
+  return (
 
-    const favoriteEdit = (e) => {
-      this.setState({
-        isFavoriteSelected: true
-      })
-    }
-
-
-    if (!movie || !user) return null;
-
-    return (
-      <Card style={{ width: '10 rem' }}>
+      <Card style={{width: '10 rem'}}>
         <div className="movie-view">
-          <img className="movie-poster" src={movie.ImagePath} />
+          <img className="movie-poster" src={movie.ImagePath}/>
           <ListGroup varient="flush">
             <ListGroup.Item>
               <div className="movie-title">
                 <span className="label">Title: </span>
                 <span className="value">{movie.Title}</span>
                 {
-                  //this.state.isFavoriteSelected ?
                   user.FavoriteMovies.includes(movie._id) ?
-                    <Button onClick={this.removeFavorite.bind(this)} variant="outline-warning">Unfavorite</Button> :
-                    <Button onClick={this.addFavorite.bind(this)} variant="warning">Favorite</Button>
+                      <Button onClick={removeFavorite} variant="outline-warning">Unfavorite</Button> :
+                      <Button onClick={addFavorite} variant="warning">Favorite</Button>
                 }
+
               </div>
             </ListGroup.Item>
             <ListGroup.Item>
@@ -109,11 +97,13 @@ export class MovieView extends React.Component {
               </div>
             </ListGroup.Item>
             <ListGroup.Item>
-              <button className="back-to-main" onClick={this.goBack}>Browse all movies</button>
+              <button className="back-to-main" onClick={goBack}>Browse all movies</button>
             </ListGroup.Item>
           </ListGroup>
-        </div >
+        </div>
       </Card>
-    )
-    }
-  }
+  );
+}
+
+
+export default connect(({ movies }) => ({ movies }))(MovieView);
