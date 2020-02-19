@@ -4,14 +4,13 @@ import { Card, Button, CardDeck, Container } from 'react-bootstrap';
 
 import { Link } from "react-router-dom";
 
-
 export class MovieCard extends React.Component {
   render() {
     const { movie } = this.props;
 
     return (
 
-            <Card style={{ minWidth: '240px', maxWidth:'240px' }}>
+            <Card className="movie-card" style={{marginTop: '20px', minWidth: '240px', maxWidth:'240px' }}>
               <Card.Img variant="top" src={movie.ImagePath} />
               <Card.Body>
                 <Card.Title>{movie.Title}</Card.Title>
