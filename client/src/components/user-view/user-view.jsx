@@ -1,21 +1,18 @@
 import React, {useState} from 'react';
+import PropTypes from 'prop-types';
 import {Button, Card, CardDeck, Form, ListGroup} from 'react-bootstrap';
 import './user-view.scss';
 
-import {MovieCard} from '../movie-card/movie-card';
-import {ProfileMovieCard} from '../user-view/profile-movie-card';
+import ProfileMovieCard from '../user-view/profile-movie-card';
 import axios from "axios";
 
 import { connect } from 'react-redux';
-import { setMovies } from '../../actions/actions';
-import { setUser } from '../../actions/actions';
-import {MainView} from "../main-view/main-view";
+
 
 export class UserView extends React.Component {
 
   constructor(props) {
     super(props);
-    //console.log("constructor props: " + JSON.stringify(props));
     this.state = {};
 
     this.state = {
@@ -23,23 +20,33 @@ export class UserView extends React.Component {
       isEmailEditable: false,
       isPasswordEditable: false,
       isBirthdayEditable: false,
-      newUserPassword: ''
+      newUserPassword: '',
+      newUsername: ''
     };
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    this.state.copyOfUserProfile = this.props.userProfile ? this.props.userProfile : undefined;
+    if (!this.props.users || !this.props.user) return;
+    let userProfile = this.props.users.find(u => u.Username === this.props.username);
+
+    if (!prevProps.users.length && userProfile) {
+      this.state.copyOfUserProfile = {};
+      Object.keys(userProfile).forEach((k) => {
+        if (!(userProfile).hasOwnProperty(k)) return;
+        this.state.copyOfUserProfile[k] = userProfile[k];
+      });
+    }
   }
 
   newUsername(event) {
-    const { userProfile, user } = this.props;
+    const { username } = this.props;
     event.preventDefault();
     const updatedUserObject = {
       username: this.state.copyOfUserProfile.Username,
       email: this.state.copyOfUserProfile.Email,
       birthday: this.state.copyOfUserProfile.Birthday
     };
-    axios.put(`https://watchrdb.herokuapp.com/users/${user}`,
+    axios.put(`https://watchrdb.herokuapp.com/users/${username}`,
         updatedUserObject,
         {headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
     )
@@ -55,25 +62,24 @@ export class UserView extends React.Component {
           //document.location.reload(true);
         })
         .catch(error => {
-          alert(`We were unable to update ${userProfile.Username}: ` + error);
+          alert(`We were unable to update username: ` + error);
         });
   };
 
   updateUsername(e) {
-    console.log("updateUsername called: " + e.target.value);
     this.state.copyOfUserProfile.Username = e.target.value;
     this.setState({copyOfUserProfile: this.state.copyOfUserProfile})
   }
 
   newBirthday(event) {
-    const { userProfile } = this.props;
+    const { username } = this.props;
     event.preventDefault();
     const updatedUserObject = {
       username: this.state.copyOfUserProfile.Username,
       email: this.state.copyOfUserProfile.Email,
       birthday: this.state.copyOfUserProfile.Birthday
     };
-    axios.put(`https://watchrdb.herokuapp.com/users/${userProfile.Username}`,
+    axios.put(`https://watchrdb.herokuapp.com/users/${username}`,
         updatedUserObject,
         {headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
     )
@@ -82,18 +88,17 @@ export class UserView extends React.Component {
           document.location.reload(true);
         })
         .catch(error => {
-          alert(`We were unable to update ${userProfile.Birthday}: ` + error);
+          alert(`We were unable to update user's birthday: ` + error);
         });
   };
 
   updateBirthday(e) {
-    console.log("updateBirthday called: " + e.target.value);
     this.state.copyOfUserProfile.Birthday = e.target.value;
     this.setState({copyOfUserProfile: this.state.copyOfUserProfile})
   }
 
   newEmail(event) {
-    const { userProfile } = this.props;
+    const { username } = this.props;
     event.preventDefault();
     const updatedUserObject = {
       username: this.state.copyOfUserProfile.Username,
@@ -101,7 +106,7 @@ export class UserView extends React.Component {
       //password: this.state.copyOfUserProfile.Password,
       birthday: this.state.copyOfUserProfile.Birthday,
     };
-    axios.put(`https://watchrdb.herokuapp.com/users/${userProfile.Username}`,
+    axios.put(`https://watchrdb.herokuapp.com/users/${username}`,
         updatedUserObject,
         {headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
     )
@@ -110,19 +115,17 @@ export class UserView extends React.Component {
           document.location.reload(true);
         })
         .catch(error => {
-          alert(`We were unable to update ${userProfile.Email}: ` + error);
+          alert(`We were unable to update email: ` + error);
         });
   };
 
   updateEmail(e) {
-    console.log("updateEmail called: " + e.target.value);
     this.state.copyOfUserProfile.Email = e.target.value;
     this.setState({copyOfUserProfile: this.state.copyOfUserProfile})
   }
 
   newPassword(event) {
-    console.log("newPassword[copyOfUserProfile]1: " + JSON.stringify(this.state.copyOfUserProfile));
-    const { userProfile } = this.props;
+    const { username } = this.props;
     event.preventDefault();
     const updatedUserObject = {
       username: this.state.copyOfUserProfile.Username,
@@ -130,7 +133,7 @@ export class UserView extends React.Component {
       password: this.state.newUserPassword,
       birthday: this.state.copyOfUserProfile.Birthday,
     };
-    axios.put(`https://watchrdb.herokuapp.com/users/${userProfile.Username}`,
+    axios.put(`https://watchrdb.herokuapp.com/users/${username}`,
         updatedUserObject,
         {headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
     )
@@ -139,7 +142,7 @@ export class UserView extends React.Component {
           document.location.reload(true);
         })
         .catch(error => {
-          alert(`We were unable to update ${userProfile.Password}: ` + error);
+          alert(`We were unable to update password: ` + error);
         });
   };
 
@@ -153,9 +156,8 @@ export class UserView extends React.Component {
   }
 
   render() {
-    const { user, userProfile, movies } = this.props;
+    const { user, movies, users, username } = this.props;
 
-    //console.log("[user-view] this.props: " + JSON.stringify(this.props));
 
 
     const usernameEdit = (e) => {
@@ -188,9 +190,9 @@ export class UserView extends React.Component {
     let userPassword = "test";
 
     const deleteAccount = (event) => {
-      const { userProfile } = this.props;
+      const { username } = this.props;
       event.preventDefault();
-      axios.delete(`https://watchrdb.herokuapp.com/users/${userProfile.Username}`, {
+      axios.delete(`https://watchrdb.herokuapp.com/users/${username}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       })
           .then(response => {
@@ -202,12 +204,12 @@ export class UserView extends React.Component {
           .catch(error => {
             alert('Unable to delete account');
           });
-    }
+    };
 
-    if (!userProfile || !movies) return null;
+    if (!movies || !user || !users || !username || !users.length) return null;
 
-    let filteredMovies = movies.filter(m => userProfile.FavoriteMovies.includes(m._id) );
-    //console.log("filteredMovies: " + JSON.stringify(filteredMovies));
+    let userProfile = users.find(u => u.Username === username);
+    let filteredMovies = userProfile.FavoriteMovies ? movies.filter(m => userProfile.FavoriteMovies.includes(m._id) ) : [];
 
     let usernameField;
     let emailField;
@@ -314,7 +316,7 @@ export class UserView extends React.Component {
 
                     { filteredMovies.length === 0 ?
                         <span>&nbsp;No favorites selected</span> :
-                        <CardDeck>
+                        <CardDeck id="favorites">
                           {
                             filteredMovies.map(m => (
                                 <ProfileMovieCard key={m._id} user={userProfile} movie={m} />
@@ -339,12 +341,22 @@ export class UserView extends React.Component {
 }
 
 let mapStateToProps = state => {
-  return { movies: state.movies }
+  return {
+    movies: state.movies,
+    user: state.user,
+    users: state.users
+  }
 };
 
-const mapDispatchToProps = {
-  setMovies,
-  setUser
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserView);
+export default connect(mapStateToProps, null /*mapDispatchToProps*/)(UserView);
+
+UserView.propTypes = {
+  userProfile: PropTypes.shape({
+    Username: PropTypes.string,
+    Password: PropTypes.string,
+    Email: PropTypes.string,
+    Birthday: PropTypes.string,
+    FavoriteMovies: PropTypes.array
+  })
+};
