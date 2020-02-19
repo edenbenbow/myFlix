@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Form, Button, Container } from 'react-bootstrap';
 import './registration-view.scss';
 import axios from 'axios';
-import { Navigation } from '../navbar/navbar';
 
 import { Link } from "react-router-dom";
 
@@ -11,7 +10,7 @@ export function RegistrationView(props) {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [birthday, setBirthday] = useState('');
-//  }
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -36,7 +35,6 @@ export function RegistrationView(props) {
     return (
         <Container>
             <Form className="registration-form">
-                {/*<img src={logo} alt="logo" style={{ width: "300px" }} />*/}
                 <h2>Create an account</h2>
                 <Form.Group controlId="formBasicUsername">
                     <Form.Control
