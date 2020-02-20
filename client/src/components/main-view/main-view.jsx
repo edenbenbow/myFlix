@@ -36,7 +36,7 @@ export class MainView extends React.Component {
                 // Assign the result to the state
                 this.props.setMovies(response.data);
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.log(error);
             });
     }
@@ -49,7 +49,7 @@ export class MainView extends React.Component {
             .then(response => {
                 this.props.setUsers(response.data);
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.log(error);
             });
     }
@@ -62,7 +62,7 @@ export class MainView extends React.Component {
             .then(response => {
                 this.props.setUser(response.data);
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.log(error);
             });
     }
@@ -96,7 +96,7 @@ export class MainView extends React.Component {
         return (
             <Container className="main-view">
                 <Navigation user={user} />
-                <Router>
+                <Router basename="client">
                     <div className="main-view">
                         <Route
                             exact
