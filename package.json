@@ -1,14 +1,44 @@
 {
-  "devDependencies": {
-    "babel-core": "^6.26.3",
-    "cssnano": "^4.1.10",
-    "sass": "^1.24.5"
+  "name": "watchr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edenbenbow/watchr.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edenbenbow/watchr/issues"
+  },
+  "homepage": "https://github.com/edenbenbow/watchr#readme",
   "dependencies": {
-    "axios": "^0.19.1",
-    "prop-types": "^15.7.2",
+    "axios": "^0.19.0",
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-validator": "^6.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.8.7",
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
     "react-bootstrap": "^1.0.0-beta.16",
-    "react-redux": "^7.1.3",
-    "redux": "^4.0.5"
+    "react-router-dom": "^5.1.2",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "babel-core": "^7.8.4",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "sass": "^1.25.0"
   }
 }
