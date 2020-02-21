@@ -96,7 +96,7 @@ export class MainView extends React.Component {
         return (
             <Container className="main-view">
                 <Navigation user={user} />
-                <Router basename="/client">
+                <Router basename="/">
                     <div className="main-view">
                         <Route
                             exact
