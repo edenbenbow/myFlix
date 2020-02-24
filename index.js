@@ -11,7 +11,8 @@ const cors = require('cors');
 const { check, validationResult } = require('express-validator');
 const passport = require('passport');
 const allowedOrigins = [
-  'http://localhost:1234'
+  'http://localhost:1234',
+  'https://watchrdb.herokuapp.com'
 ];
 
 //Mongoose database connection
