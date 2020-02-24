@@ -25,7 +25,7 @@ export class Navigation extends React.Component {
             userMenu = (
                 <Nav>
                     <NavDropdown title={user} id="account-dropdown">
-                        <NavDropdown.Item href={`/users/${user}`}>Account</NavDropdown.Item>
+                        <NavDropdown.Item href={`/client/users/${user}`}>Account</NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
             );
@@ -38,14 +38,14 @@ export class Navigation extends React.Component {
             );
             navLinks = (
                 <Nav className="mr-auto">
-                    <Nav.Link href="/">Movies</Nav.Link>
+                    <Nav.Link href="/client">Movies</Nav.Link>
                 </Nav>
             );
         }
 
         return (
             <Navbar bg="light" variant="light">
-                <Navbar.Brand href="/">
+                <Navbar.Brand>
                     <h1>Watchr</h1>
                 </Navbar.Brand>
                 {navLinks}
