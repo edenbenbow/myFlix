@@ -17,105 +17,105 @@ function MovieView(props) {
   function addFavorite(event) {
     event.preventDefault();
     axios
-        .post(
-            `https://watchrdb.herokuapp.com/users/${user.Username}/movies/${movie._id}`,
-            { Username: localStorage.getItem("user") },
-            {
-              headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-            }
-        )
-        .then(response => {
-          alert(`${movie.Title} has been successfully added!`);
-          document.location.reload(true);
-        })
-        .catch(error => {
-          alert(
-              `We were unable to add ${movie.Title} to your favorites: ` + error
-          );
-        });
+      .post(
+        `https://watchrdb.herokuapp.com/users/${user.Username}/movies/${movie._id}`,
+        { Username: localStorage.getItem("user") },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        }
+      )
+      .then(response => {
+        alert(`${movie.Title} has been successfully added!`);
+        document.location.reload(true);
+      })
+      .catch(error => {
+        alert(
+          `We were unable to add ${movie.Title} to your favorites: ` + error
+        );
+      });
   }
 
   function removeFavorite(event) {
     event.preventDefault();
     axios
-        .delete(
-            `https://watchrdb.herokuapp.com/users/${user.Username}/movies/${movie._id}`,
-            {
-              headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-            }
-        )
-        .then(response => {
-          alert(`${movie.Title} has been removed from favorites`);
-          document.location.reload(true);
-        })
+      .delete(
+        `https://watchrdb.herokuapp.com/users/${user.Username}/movies/${movie._id}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        }
+      )
+      .then(response => {
+        alert(`${movie.Title} has been removed from favorites`);
+        document.location.reload(true);
+      })
 
-        .catch(error => {
-          alert("Unable to remove movie from favorites: " + error);
-        });
+      .catch(error => {
+        alert("Unable to remove movie from favorites: " + error);
+      });
   }
 
   function goBack() {
-    window.location = "/";
+    window.location = "/client";
   }
 
   return (
-      <Card style={{ width: "10 rem" }}>
-        <div className="movie-view">
-          <img className="movie-poster" src={movie.ImagePath} />
-          <ListGroup varient="flush">
-            <ListGroup.Item>
-              <div className="movie-title">
-                <span className="label">Title: </span>
-                <span className="value">{movie.Title}</span>
-                {user.FavoriteMovies.includes(movie._id) ? (
-                    <Button
-                        onClick={removeFavorite}
-                        variant="outline-secondary"
-                        id="remove"
-                    >
-                      Unfavorite
+    <Card style={{ width: "10 rem" }}>
+      <div className="movie-view">
+        <img className="movie-poster" src={movie.ImagePath} />
+        <ListGroup varient="flush">
+          <ListGroup.Item>
+            <div className="movie-title">
+              <span className="label">Title: </span>
+              <span className="value">{movie.Title}</span>
+              {user.FavoriteMovies.includes(movie._id) ? (
+                <Button
+                  onClick={removeFavorite}
+                  variant="outline-secondary"
+                  id="remove"
+                >
+                  Unfavorite
                     </Button>
-                ) : (
-                    <Button onClick={addFavorite} variant="warning">
-                      Favorite
+              ) : (
+                  <Button onClick={addFavorite} variant="warning">
+                    Favorite
                     </Button>
                 )}
-              </div>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <div className="movie-description">
-                <span className="label">Description: </span>
-                <span className="value">{movie.Description}</span>
-              </div>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <div className="movie-genre">
-                <span className="label">Genre: </span>
-                <span className="value">
+            </div>
+          </ListGroup.Item>
+          <ListGroup.Item>
+            <div className="movie-description">
+              <span className="label">Description: </span>
+              <span className="value">{movie.Description}</span>
+            </div>
+          </ListGroup.Item>
+          <ListGroup.Item>
+            <div className="movie-genre">
+              <span className="label">Genre: </span>
+              <span className="value">
                 <Link to={`/genres/${movie.Genre.Name}`}>
                   {movie.Genre.Name}
                 </Link>
               </span>
-              </div>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <div className="movie-director">
-                <span className="label">Director: </span>
-                <span className="value">
+            </div>
+          </ListGroup.Item>
+          <ListGroup.Item>
+            <div className="movie-director">
+              <span className="label">Director: </span>
+              <span className="value">
                 <Link to={`/directors/${movie.Director.Name}`}>
                   {movie.Director.Name}
                 </Link>
               </span>
-              </div>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <button className="back-to-main" onClick={goBack}>
-                Browse all movies
+            </div>
+          </ListGroup.Item>
+          <ListGroup.Item>
+            <button className="back-to-main" onClick={goBack}>
+              Browse all movies
               </button>
-            </ListGroup.Item>
-          </ListGroup>
-        </div>
-      </Card>
+          </ListGroup.Item>
+        </ListGroup>
+      </div>
+    </Card>
   );
 }
 
