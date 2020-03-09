@@ -1,16 +1,193 @@
-.registration-form {
-  width: 100%;
-  max-width: 330px;
-  padding: 15px;
-  margin: auto;
-  height: 100%;
+.card-img-top {
+  padding-top: 0px;
+}
+
+#filterField {
+  width: 50%;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .login-form {
   width: 100%;
   max-width: 330px;
   padding: 15px;
+  padding-top: 50px;
   margin: auto;
   height: 100%;
+}
+
+.btn-primary {
+  margin-top: 20px;
+}
+
+.login {
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+.form-group {
+  padding-top: 20px;
+}
+.movie-view {
+  text-align: center;
+}
+
+img {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.card-deck {
+  padding-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.label {
+  font-weight: bold;
+}
+
+button.btn.btn-warning, button.btn-outline-warning {
+  margin-left: 15px;
+}
+
+.update-value {
+  margin-left: 10px;
+  border-radius: 5px;
+}
+
+#remove {
+  margin-top: 0px;
+}
+.director-view {
+  text-align: center;
+}
+
+img {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.card-deck {
+  padding-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.label {
+  font-weight: bold;
+}
+
+@media (max-width: 980px) {
+  .card-deck {
+    width: 100%;
+    padding-left: 50px;
+  }
+}
+.genre-view {
+  text-align: center;
+}
+
+img {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.card-deck {
+  padding-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.label {
+  font-weight: bold;
+}
+
+@media (max-width: 980px) {
+  .card-deck {
+    width: 100%;
+    padding-left: 50px;
+  }
+}
+.user-view {
+  text-align: center;
+}
+
+img {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.card-deck {
+  padding-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 20px;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.btn-outline-primary {
+  margin-left: 10px;
+}
+
+.btn-danger {
+  margin-top: 10px;
+}
+
+.profileField {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cancel {
+  margin-top: 10px;
+}
+.remove-button {
+  margin: 15px;
+}
+.registration-form {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  padding-top: 50px;
+  margin: auto;
+  height: 100%;
+}
+
+.btn-primary {
+  margin-top: 20px;
+}
+
+.btn-outline-secondary {
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+.form-group {
+  padding-top: 20px;
+}
+.navbar {
+  width: 100%;
+  color: black;
+}
+
+h1 {
+  color: rebeccapurple;
+}
+
+button.logout {
+  margin-right: 50px;
+  border-radius: 7px;
+  margin-bottom: 15px;
+}
+
+.dropdown {
+  margin-right: 20px;
 }
 .my-flix {
   color: steelblue;
