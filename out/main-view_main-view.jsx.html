@@ -1,4 +1,32 @@
-import React from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: main-view/main-view.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: main-view/main-view.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
 import axios from "axios";
 import { Container } from "react-bootstrap";
 import PropTypes from "prop-types";
@@ -120,55 +148,55 @@ export class MainView extends React.Component {
         let { user } = this.state;
 
         return (
-            <Container className="main-view">
-                <Navigation user={user} />
-                <Router basename="/client">
-                    <div className="main-view">
-                        <Route
+            &lt;Container className="main-view">
+                &lt;Navigation user={user} />
+                &lt;Router basename="/client">
+                    &lt;div className="main-view">
+                        &lt;Route
                             exact
                             path="/"
                             render={() => {
                                 if (!user) {
                                     return (
-                                        <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
+                                        &lt;LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                                     );
                                 }
-                                return <MoviesList movies={movies} />;
+                                return &lt;MoviesList movies={movies} />;
                             }}
                         />
-                        <Route path="/register" render={() => <RegistrationView />} />
-                        <Route
+                        &lt;Route path="/register" render={() => &lt;RegistrationView />} />
+                        &lt;Route
                             path="/movies/:movieId"
                             render={({ match }) => (
-                                <MovieView
+                                &lt;MovieView
                                     user={users.find(u => u.Username === user)}
                                     movie={movies.find(m => m._id === match.params.movieId)}
                                 />
                             )}
                         />
-                        <Route
+                        &lt;Route
                             path="/genres/:name"
                             render={({ match }) => {
-                                if (!movies) return <div className="main-view" />;
-                                return <GenreView genreName={match.params.name} />;
+                                if (!movies) return &lt;div className="main-view" />;
+                                return &lt;GenreView genreName={match.params.name} />;
                             }}
                         />
-                        <Route
+                        &lt;Route
                             path="/directors/:name"
                             render={({ match }) => {
-                                if (!movies) return <div className="main-view" />;
-                                return <DirectorView directorName={match.params.name} />;
+                                if (!movies) return &lt;div className="main-view" />;
+                                return &lt;DirectorView directorName={match.params.name} />;
                             }}
                         />
-                        <Route
+                        &lt;Route
                             path="/users/:username"
                             render={({ match }) => (
-                                <UserView username={match.params.username} />
+                                &lt;UserView username={match.params.username} />
                             )}
                         />
-                    </div>
-                </Router>
-            </Container>
+                    &lt;/div>
+                &lt;/Router>
+            &lt;/Container>
         );
     }
 }
@@ -208,3 +236,26 @@ MainView.propTypes = {
         username: PropTypes.string
     })
 };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MainView.html">MainView</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="UserView.html">UserView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#birthdayEdit">birthdayEdit</a></li><li><a href="global.html#cancelEdit">cancelEdit</a></li><li><a href="global.html#deleteAccount">deleteAccount</a></li><li><a href="global.html#DirectorView">DirectorView</a></li><li><a href="global.html#emailEdit">emailEdit</a></li><li><a href="global.html#GenreView">GenreView</a></li><li><a href="global.html#getMovies">getMovies</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#mapStateToProps">mapStateToProps</a></li><li><a href="global.html#MoviesList">MoviesList</a></li><li><a href="global.html#MovieView">MovieView</a></li><li><a href="global.html#newBirthday">newBirthday</a></li><li><a href="global.html#newEmail">newEmail</a></li><li><a href="global.html#newPassword">newPassword</a></li><li><a href="global.html#newUsername">newUsername</a></li><li><a href="global.html#onLoggedIn">onLoggedIn</a></li><li><a href="global.html#onLogout">onLogout</a></li><li><a href="global.html#passwordEdit">passwordEdit</a></li><li><a href="global.html#RegistrationView">RegistrationView</a></li><li><a href="global.html#removeFavorite">removeFavorite</a></li><li><a href="global.html#updateBirthday">updateBirthday</a></li><li><a href="global.html#updateEmail">updateEmail</a></li><li><a href="global.html#updatePassword">updatePassword</a></li><li><a href="global.html#updateUsername">updateUsername</a></li><li><a href="global.html#usernameEdit">usernameEdit</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jun 02 2020 20:56:06 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

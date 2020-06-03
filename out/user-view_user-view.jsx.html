@@ -1,4 +1,32 @@
-import React, { useState } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: user-view/user-view.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: user-view/user-view.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Button, Card, CardDeck, Form, ListGroup } from "react-bootstrap";
 import "./user-view.scss";
@@ -35,7 +63,7 @@ export class UserView extends React.Component {
       u => u.Username === this.props.username
     );
 
-    if (!prevProps.users.length && userProfile) {
+    if (!prevProps.users.length &amp;&amp; userProfile) {
       this.state.copyOfUserProfile = {};
       Object.keys(userProfile).forEach(k => {
         if (!userProfile.hasOwnProperty(k)) return;
@@ -335,226 +363,226 @@ export class UserView extends React.Component {
 
     if (this.state.isUsernameEditable) {
       usernameField = (
-        <Form.Group controlId="formBasicUsername" className="profileField">
-          <Form.Control
+        &lt;Form.Group controlId="formBasicUsername" className="profileField">
+          &lt;Form.Control
             type="text"
             placeholder="Enter username"
             value={this.state.copyOfUserProfile.Username}
             onChange={this.updateUsername.bind(this)}
           />
-          <Button
+          &lt;Button
             variant="danger"
             onClick={this.newUsername.bind(this)}
             size="sm"
           >
             Save
-            </Button>
-          <Button
+            &lt;/Button>
+          &lt;Button
             variant="link"
             className="cancel"
             onClick={this.cancelEdit.bind(this)}
           >
             Cancel
-            </Button>
-        </Form.Group>
+            &lt;/Button>
+        &lt;/Form.Group>
       );
     } else {
-      usernameField = <span className="value">{userProfile.Username}</span>;
+      usernameField = &lt;span className="value">{userProfile.Username}&lt;/span>;
     }
 
     if (this.state.isEmailEditable) {
       emailField = (
-        <Form.Group controlId="formBasicEmail" className="profileField">
-          <Form.Control
+        &lt;Form.Group controlId="formBasicEmail" className="profileField">
+          &lt;Form.Control
             type="text"
             placeholder="Enter email"
             value={this.state.copyOfUserProfile.Email}
             onChange={this.updateEmail.bind(this)}
           />
-          <Button variant="danger" onClick={this.newEmail.bind(this)} size="sm">
+          &lt;Button variant="danger" onClick={this.newEmail.bind(this)} size="sm">
             Save
-            </Button>
-          <Button
+            &lt;/Button>
+          &lt;Button
             variant="link"
             className="cancel"
             onClick={this.cancelEdit.bind(this)}
           >
             Cancel
-            </Button>
-        </Form.Group>
+            &lt;/Button>
+        &lt;/Form.Group>
       );
     } else {
-      emailField = <span className="value">{userProfile.Email}</span>;
+      emailField = &lt;span className="value">{userProfile.Email}&lt;/span>;
     }
 
     if (this.state.isPasswordEditable) {
       passwordField = (
-        <Form.Group controlId="formBasicPassword" className="profileField">
-          <Form.Control
+        &lt;Form.Group controlId="formBasicPassword" className="profileField">
+          &lt;Form.Control
             type="text"
             placeholder="Enter Password"
             value={this.state.newUserPassword}
             onChange={this.updatePassword.bind(this)}
           />
-          <Button
+          &lt;Button
             variant="danger"
             onClick={this.newPassword.bind(this)}
             size="sm"
           >
             Save
-            </Button>
-          <Button
+            &lt;/Button>
+          &lt;Button
             variant="link"
             className="cancel"
             onClick={this.cancelEdit.bind(this)}
           >
             Cancel
-            </Button>
-        </Form.Group>
+            &lt;/Button>
+        &lt;/Form.Group>
       );
     } else {
-      passwordField = <span className="value">********</span>;
+      passwordField = &lt;span className="value">********&lt;/span>;
     }
 
     if (this.state.isBirthdayEditable) {
       birthdayField = (
-        <Form.Group controlId="formBasicBirthday" className="profileField">
-          <Form.Control
+        &lt;Form.Group controlId="formBasicBirthday" className="profileField">
+          &lt;Form.Control
             type="text"
             placeholder="Enter date of birth"
             value={this.state.copyOfUserProfile.Birthday}
             onChange={this.updateBirthday.bind(this)}
           />
-          <Button
+          &lt;Button
             variant="danger"
             onClick={this.newBirthday.bind(this)}
             size="sm"
           >
             Save
-            </Button>
-          <Button
+            &lt;/Button>
+          &lt;Button
             variant="link"
             className="cancel"
             onClick={this.cancelEdit.bind(this)}
           >
             Cancel
-            </Button>
-        </Form.Group>
+            &lt;/Button>
+        &lt;/Form.Group>
       );
     } else {
-      birthdayField = <span className="value">{userProfile.Birthday}</span>;
+      birthdayField = &lt;span className="value">{userProfile.Birthday}&lt;/span>;
     }
 
     return (
-      <Card style={{ width: "20 rem" }}>
-        <div className="user-view">
-          <ListGroup varient="flush">
-            <ListGroup.Item>
-              <div className="username">
-                <span className="label">Username: </span>
+      &lt;Card style={{ width: "20 rem" }}>
+        &lt;div className="user-view">
+          &lt;ListGroup varient="flush">
+            &lt;ListGroup.Item>
+              &lt;div className="username">
+                &lt;span className="label">Username: &lt;/span>
                 {usernameField}
                 {this.state.isUsernameEditable ||
                   this.state.isPasswordEditable ||
                   this.state.isEmailEditable ||
                   this.state.isBirthdayEditable ? null : (
-                    <Button
+                    &lt;Button
                       variant="link"
                       onClick={usernameEdit}
                       size="sm"
                       className="editButton"
                     >
                       Edit
-                      </Button>
+                      &lt;/Button>
                   )}
-              </div>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <div className="user-email">
-                <span className="label">Password: </span>
+              &lt;/div>
+            &lt;/ListGroup.Item>
+            &lt;ListGroup.Item>
+              &lt;div className="user-email">
+                &lt;span className="label">Password: &lt;/span>
                 {passwordField}
                 {this.state.isUsernameEditable ||
                   this.state.isPasswordEditable ||
                   this.state.isEmailEditable ||
                   this.state.isBirthdayEditable ? null : (
-                    <Button
+                    &lt;Button
                       variant="link"
                       onClick={passwordEdit}
                       size="sm"
                       className="editButton"
                     >
                       Edit
-                      </Button>
+                      &lt;/Button>
                   )}
-              </div>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <div className="user-email">
-                <span className="label">Email: </span>
+              &lt;/div>
+            &lt;/ListGroup.Item>
+            &lt;ListGroup.Item>
+              &lt;div className="user-email">
+                &lt;span className="label">Email: &lt;/span>
                 {emailField}
                 {this.state.isUsernameEditable ||
                   this.state.isPasswordEditable ||
                   this.state.isEmailEditable ||
                   this.state.isBirthdayEditable ? null : (
-                    <Button
+                    &lt;Button
                       variant="link"
                       onClick={emailEdit}
                       size="sm"
                       className="editButton"
                     >
                       Edit
-                      </Button>
+                      &lt;/Button>
                   )}
-              </div>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <div className="user-birthday">
-                <span className="label">Birthday: </span>
+              &lt;/div>
+            &lt;/ListGroup.Item>
+            &lt;ListGroup.Item>
+              &lt;div className="user-birthday">
+                &lt;span className="label">Birthday: &lt;/span>
                 {birthdayField}
                 {this.state.isUsernameEditable ||
                   this.state.isPasswordEditable ||
                   this.state.isEmailEditable ||
                   this.state.isBirthdayEditable ? null : (
-                    <Button
+                    &lt;Button
                       variant="link"
                       onClick={birthdayEdit}
                       size="sm"
                       className="editButton"
                     >
                       Edit
-                      </Button>
+                      &lt;/Button>
                   )}
-              </div>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <div className="user-movies">
-                <span className="label">Favorite movies:</span>
-                <span className="value">
+              &lt;/div>
+            &lt;/ListGroup.Item>
+            &lt;ListGroup.Item>
+              &lt;div className="user-movies">
+                &lt;span className="label">Favorite movies:&lt;/span>
+                &lt;span className="value">
                   {filteredMovies.length === 0 ? (
-                    <span>&nbsp;No favorites selected</span>
+                    &lt;span>&amp;nbsp;No favorites selected&lt;/span>
                   ) : (
-                      <CardDeck id="favorites">
+                      &lt;CardDeck id="favorites">
                         {filteredMovies.map(m => (
-                          <ProfileMovieCard
+                          &lt;ProfileMovieCard
                             key={m._id}
                             user={userProfile}
                             movie={m}
                           />
                         ))}
-                      </CardDeck>
+                      &lt;/CardDeck>
                     )}
-                </span>
-              </div>
-            </ListGroup.Item>
-          </ListGroup>
-          <ListGroup.Item>
-            <div className="delete-account">
-              <Button variant="light" onClick={deleteAccount} size="sm">
+                &lt;/span>
+              &lt;/div>
+            &lt;/ListGroup.Item>
+          &lt;/ListGroup>
+          &lt;ListGroup.Item>
+            &lt;div className="delete-account">
+              &lt;Button variant="light" onClick={deleteAccount} size="sm">
                 Delete account
-                </Button>
-            </div>
-          </ListGroup.Item>
-        </div>
-      </Card>
+                &lt;/Button>
+            &lt;/div>
+          &lt;/ListGroup.Item>
+        &lt;/div>
+      &lt;/Card>
     );
   }
 }
@@ -583,3 +611,26 @@ UserView.propTypes = {
     FavoriteMovies: PropTypes.array
   })
 };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MainView.html">MainView</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="UserView.html">UserView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#birthdayEdit">birthdayEdit</a></li><li><a href="global.html#cancelEdit">cancelEdit</a></li><li><a href="global.html#deleteAccount">deleteAccount</a></li><li><a href="global.html#DirectorView">DirectorView</a></li><li><a href="global.html#emailEdit">emailEdit</a></li><li><a href="global.html#GenreView">GenreView</a></li><li><a href="global.html#getMovies">getMovies</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#mapStateToProps">mapStateToProps</a></li><li><a href="global.html#MoviesList">MoviesList</a></li><li><a href="global.html#MovieView">MovieView</a></li><li><a href="global.html#newBirthday">newBirthday</a></li><li><a href="global.html#newEmail">newEmail</a></li><li><a href="global.html#newPassword">newPassword</a></li><li><a href="global.html#newUsername">newUsername</a></li><li><a href="global.html#onLoggedIn">onLoggedIn</a></li><li><a href="global.html#onLogout">onLogout</a></li><li><a href="global.html#passwordEdit">passwordEdit</a></li><li><a href="global.html#RegistrationView">RegistrationView</a></li><li><a href="global.html#removeFavorite">removeFavorite</a></li><li><a href="global.html#updateBirthday">updateBirthday</a></li><li><a href="global.html#updateEmail">updateEmail</a></li><li><a href="global.html#updatePassword">updatePassword</a></li><li><a href="global.html#updateUsername">updateUsername</a></li><li><a href="global.html#usernameEdit">usernameEdit</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jun 02 2020 20:56:06 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

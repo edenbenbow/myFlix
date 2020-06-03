@@ -3,7 +3,21 @@ import "./navbar.scss";
 import { Nav, Navbar, NavDropdown, Button } from "react-bootstrap";
 import PropTypes from "prop-types";
 
+/**
+ * Shows navigation bar
+ * @class Navigation
+ * @returns {Navigation}
+ */
+
 export class Navigation extends React.Component {
+
+    /**
+     * Logs out user
+     * @function onLogout
+     * @param token
+     * @param user
+     */
+
     onLogout() {
         localStorage.removeItem("token");
         localStorage.removeItem("user");

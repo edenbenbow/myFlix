@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: registration-view/registration-view.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: registration-view/registration-view.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import { Form, Button, Container } from "react-bootstrap";
+import "./registration-view.scss";
+import axios from "axios";
+
+import { Link } from "react-router-dom";
+
+/**
+ * Shows registration page
+ * @function RegistrationView
+ * @param {string} props
+ * @returns {RegistrationView}
+ */
+
+
+export function RegistrationView(props) {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+    const [birthday, setBirthday] = useState("");
+
+    /**
+     * @function handleSubmit
+     * @param {event}
+     */
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        console.log(username, password, birthday, email);
+        /* Send a request to the server for authentication */
+        axios
+            .post("https://watchrdb.herokuapp.com/users", {
+                username: username,
+                password: password,
+                birthday: birthday,
+                email: email
+            })
+            .then(response => {
+                const data = response.data;
+                console.log(data);
+                window.open("/client", "_self");
+            })
+            .catch(e => {
+                console.log("Error registering user.");
+            });
+    };
+
+    return (
+        &lt;Container>
+            &lt;Form className="registration-form">
+                &lt;h2>Create an account&lt;/h2>
+                &lt;Form.Group controlId="formBasicUsername">
+                    &lt;Form.Control
+                        type="text"
+                        placeholder="Enter username"
+                        value={username}
+                        onChange={e => setUsername(e.target.value)}
+                    />
+                &lt;/Form.Group>
+                &lt;Form.Group controlId="formBasicPassword">
+                    &lt;Form.Control
+                        type="text"
+                        placeholder="Enter Password"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                    />
+                &lt;/Form.Group>
+                &lt;Form.Group controlId="formBasicEmail">
+                    &lt;Form.Control
+                        type="text"
+                        placeholder="Enter Email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                    />
+                &lt;/Form.Group>
+                &lt;Form.Group controlId="formBasicBirthday">
+                    &lt;Form.Control
+                        type="text"
+                        placeholder="Enter Date of Birth"
+                        value={birthday}
+                        onChange={e => setBirthday(e.target.value)}
+                    />
+                &lt;/Form.Group>
+                &lt;Button variant="primary" type="submit" onClick={handleSubmit}>
+                    Sign up
+                &lt;/Button>
+                &lt;Link to={`/`}>
+                    &lt;Button variant="outline-secondary">Sign in&lt;/Button>
+                &lt;/Link>
+            &lt;/Form>
+        &lt;/Container>
+    );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MainView.html">MainView</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="UserView.html">UserView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#birthdayEdit">birthdayEdit</a></li><li><a href="global.html#cancelEdit">cancelEdit</a></li><li><a href="global.html#deleteAccount">deleteAccount</a></li><li><a href="global.html#DirectorView">DirectorView</a></li><li><a href="global.html#emailEdit">emailEdit</a></li><li><a href="global.html#GenreView">GenreView</a></li><li><a href="global.html#getMovies">getMovies</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#mapStateToProps">mapStateToProps</a></li><li><a href="global.html#MoviesList">MoviesList</a></li><li><a href="global.html#MovieView">MovieView</a></li><li><a href="global.html#newBirthday">newBirthday</a></li><li><a href="global.html#newEmail">newEmail</a></li><li><a href="global.html#newPassword">newPassword</a></li><li><a href="global.html#newUsername">newUsername</a></li><li><a href="global.html#onLoggedIn">onLoggedIn</a></li><li><a href="global.html#onLogout">onLogout</a></li><li><a href="global.html#passwordEdit">passwordEdit</a></li><li><a href="global.html#RegistrationView">RegistrationView</a></li><li><a href="global.html#removeFavorite">removeFavorite</a></li><li><a href="global.html#updateBirthday">updateBirthday</a></li><li><a href="global.html#updateEmail">updateEmail</a></li><li><a href="global.html#updatePassword">updatePassword</a></li><li><a href="global.html#updateUsername">updateUsername</a></li><li><a href="global.html#usernameEdit">usernameEdit</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jun 02 2020 20:56:06 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

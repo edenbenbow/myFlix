@@ -9,6 +9,14 @@ import axios from "axios";
 
 import { connect } from "react-redux";
 
+/**
+ * Shows movie information
+ * @function MovieView
+ * @param {string} props
+ * @returns {MovieView}
+ */
+
+
 function MovieView(props) {
   const { user, movie, movies } = props;
 
@@ -34,6 +42,12 @@ function MovieView(props) {
         );
       });
   }
+
+  /**
+   * Removes movie from user's favorites
+   * @function removeFavorite
+   * @param event
+   */
 
   function removeFavorite(event) {
     event.preventDefault();

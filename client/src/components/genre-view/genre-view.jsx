@@ -8,6 +8,13 @@ import { connect } from "react-redux";
 import MoviesList from "../movies-list/movies-list";
 import PropTypes from "prop-types";
 
+/**
+ * Shows genre information
+ * @function GenreView
+ * @param {string} props
+ * @returns {GenreView}
+ */
+
 function GenreView(props) {
     const { movies, genreName } = props;
     //console.log("this.props: " + JSON.stringify(this.props));

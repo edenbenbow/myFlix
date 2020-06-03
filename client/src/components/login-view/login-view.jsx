@@ -8,9 +8,23 @@ import { connect } from "react-redux";
 import { setUser } from "../../actions/actions";
 import { Link } from "react-router-dom";
 
+/**
+ * Shows login page
+ * @function LoginView
+ * @param {string} props
+ * @returns {LoginView}
+ */
+
+
 export function LoginView(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    /**
+     * Logs in with username and password
+     * @function handleSubmit
+     * @param {event}
+     */
 
     const handleSubmit = e => {
         e.preventDefault();

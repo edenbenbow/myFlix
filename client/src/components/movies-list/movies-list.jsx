@@ -7,10 +7,24 @@ import "./movies-list.scss";
 import { MovieCard } from "../movie-card/movie-card";
 import VisibilityFilterInput from "../visibility-filter-input/visibility-filter-input";
 
+/**
+ * @function mapStateToProps
+ * @param state
+ * @returns visibilityFilter
+ */
+
 const mapStateToProps = state => {
     const { visibilityFilter } = state;
     return { visibilityFilter };
 };
+
+/**
+ * Shows movies in database
+ * @function MoviesList
+ * @param {string} props
+ * @returns {MoviesList}
+ */
+
 
 function MoviesList(props) {
     const { movies, visibilityFilter } = props;

@@ -7,10 +7,24 @@ import "./profile-movie-card.scss";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
+/**
+ * Shows individual movie information
+ * @function ProfileMovieCard
+ * @param {string} props
+ * @returns {ProfileMovieCard}
+ */
+
+
 function ProfileMovieCard(props) {
     const { user, movie, movies } = props;
 
     if (!user || !movies || !movies.length) return null;
+
+    /**
+     * Removes movie from user favorites
+     * @function removeFavorite
+     * @param event
+     */
 
     function removeFavorite(event) {
         event.preventDefault();

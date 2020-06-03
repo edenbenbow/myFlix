@@ -63,7 +63,34 @@ app.get('/', function (req, res) {
   res.send(responseText);
 });
 
-//Returns a list of all movies
+
+/**
+ * Returns page showing all movies
+ * endpoint URL: /movies
+ * GET request
+ * no required params
+ * example request:
+ * getMovies(token) {
+ *      axios
+ *         .get("https://watchrdb.herokuapp.com/movies", {
+ *             headers: { Authorization: `Bearer ${token}` }
+ *         })
+ *         .then(response => {
+ *             // Assign the result to the state
+ *             this.props.setMovies(response.data);
+ *         })
+ *         .catch(function (error) {
+ *             console.log(error);
+ *         });
+ *}
+ * example response:
+ * @param {string} title
+ * @param {string} description
+ * @param {string} image path
+ * @param {object} genre
+ */
+
+
 
 app.get("/movies", passport.authenticate('jwt', { session: false }), function (req, res) {
   Movies.find()
@@ -76,7 +103,19 @@ app.get("/movies", passport.authenticate('jwt', { session: false }), function (r
     });
 });
 
-//Returns data about a single movie by title
+/**
+ * Returns data about a single movie by title
+ * endpoint URL: /movies/[title]
+ * GET request
+ * required params:
+ * @param {string} title
+ * example response:
+ * @param {object} genre
+ * @param {string} director
+ * @param {string} title
+ * @param {string} description
+ * @param {string} image path
+ */
 
 app.get("/movies/:title", function (req, res) {
   Movies.findOne({ Title: req.params.Title })
@@ -89,7 +128,17 @@ app.get("/movies/:title", function (req, res) {
     });
 });
 
-//Returns data about a genre by name
+
+/**
+ * Returns data about a genre by name
+ * endpoint URL: /genres/[name]
+ * GET request
+ * required params:
+ * @param {string} genre name
+ * example response:
+ * @param {string} title
+ * @param {string} description
+ */
 
 app.get("/genres/:name", function (req, res) {
   Movies.findOne({ 'Genre.Name': req.params.Name })
@@ -102,7 +151,18 @@ app.get("/genres/:name", function (req, res) {
     });
 });
 
-//Returns data about a director
+
+/**
+ * Returns data about a director
+ * endpoint URL: /movies/directors/[name]
+ * GET request
+ * required params:
+ * @param {string} name
+ * example response:
+ * @param {string} name
+ * @param {string} bio
+ * @param {date} date of birth
+ */
 
 app.get("/directors/:name", function (req, res) {
   movies.findOne({ "Director.Name": req.params.Name })
@@ -115,7 +175,23 @@ app.get("/directors/:name", function (req, res) {
     });
 });
 
-//Get all users
+
+/**
+ * Gets all users
+ * endpoint URL: /users
+ * GET request
+ * no required params
+ * example request:
+ * { "Username": "janeanderson",
+ *  "Password": "12345",
+ *  "Email": "janeanderson@gmail.com",
+ *  "Birthday": "1/1/2001" }
+ * example response:
+ * @param {string} username
+ * @param {string} password
+ * @param {string} email address
+ * @param {date} date of birth
+ */
 
 app.get("/users", passport.authenticate('jwt', { session: false }), function (req, res) {
 
@@ -129,7 +205,26 @@ app.get("/users", passport.authenticate('jwt', { session: false }), function (re
     });
 });
 
-//Allows new users to register
+
+/**
+ * Allows new users to register
+ * endpoint URL: /users/[UserID]
+ * POST request
+ * params required:
+ * @params {string} username
+ * @params {string} password
+ * @params {string} email
+ * @params {string} date of birth
+ * example request:
+ * { "Username": "johnsmith",
+ *  "Password": "12345",
+ *  "Email": "johnsmith@gmail.com",
+ *  "Birthday": "1/1/2001" }
+ * example response:
+ * @param {string} confirmation message
+ */
+
+
 
 app.post('/users',
   [check('username', 'Username is required').isLength({ min: 5 }),
@@ -169,7 +264,19 @@ app.post('/users',
       });
   });
 
-//Get a user by username
+/**
+ * Gets a user by username
+ * endpoint URL: /users/[username]
+ * GET request
+ * params required:
+ * @params {string} username
+ * example response:
+ * @param {string} username
+ * @param {string} password
+ * @param {string} email address
+ * @param {date} date of birth
+ */
+
 
 app.get("/users/:username", passport.authenticate('jwt', { session: false }), function (req, res) {
   Users.findOne({ Username: req.params.username })
@@ -182,11 +289,17 @@ app.get("/users/:username", passport.authenticate('jwt', { session: false }), fu
     });
 });
 
-//Allows a user to log in
 
-
-
-//Allows users to update their user info
+/**
+ * Allows users to update their user info
+ * endpoint URL: /users/[username]
+ * PUT request
+ * params required:
+ * @params {string} username
+ * @params {string} password
+ * @params {string} email
+ * @params {string} date of birth
+ */
 
 app.put("/users/:username", passport.authenticate("jwt", { session: false }), [check('username', 'Username is required').isLength({ min: 5 }),
 check('username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
@@ -229,7 +342,12 @@ check('email', 'Email does not appear to be valid').isEmail()], (req, res) => {
 });
 
 
-//Allows users to add a movie to their list of favorites
+/**
+ * Allows users to add a movie to their list of favorites
+ * endpoint URL: /users/username/favorites/movieID
+ * POST request
+ * no params required
+ */
 
 app.post('/users/:username/movies/:movieId', passport.authenticate('jwt', { session: false }), function (req, res) {
   Users.findOneAndUpdate({
@@ -248,7 +366,15 @@ app.post('/users/:username/movies/:movieId', passport.authenticate('jwt', { sess
     });
 });
 
-//Allows users to remove a movie from their list of favorites
+
+/**
+ * Allows users to remove a movie from their list of favorites
+ * endpoint URL: /users/username/favorites/movieID
+ * DELETE request
+ * no params required
+ * example response:
+ * @param {string} confirmation message
+ */
 
 app.delete("/users/:username/movies/:movieId", passport.authenticate('jwt', { session: false }), function (req, res) {
   Users.findOneAndUpdate({ Username: req.params.username }, {
@@ -265,7 +391,16 @@ app.delete("/users/:username/movies/:movieId", passport.authenticate('jwt', { se
     })
 });
 
-//Delete a user by username
+
+/**
+ * Deletes a user by username
+ * endpoint URL: /users/username
+ * DELETE request
+ * params required:
+ * @param {string} username
+ * example response:
+ * @param {string} confirmation message
+ */
 
 app.delete('/users/:username', passport.authenticate('jwt', { session: false }), function (req, res) {
   Users.findOneAndRemove({ Username: req.params.username })

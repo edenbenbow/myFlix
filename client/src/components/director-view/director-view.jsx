@@ -7,6 +7,13 @@ import "./director-view.scss";
 import { connect } from "react-redux";
 import MoviesList from "../movies-list/movies-list";
 
+/**
+ * Shows director information
+ * @function DirectorView
+ * @param {string} props
+ * @returns {DirectorView}
+ */
+
 function DirectorView(props) {
     const { movies, directorName } = props;
 
